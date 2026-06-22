@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vendor Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">LOGO</div>
+
+            <nav class="menu">
+                <a href="#" class="menu-item active">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <i class="bi bi-clipboard-data"></i>
+                    <span>My products</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <i class="bi bi-people"></i>
+                    <span>Orders</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <i class="bi bi-bar-chart"></i>
+                    <span>Sale statistics</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </a>
+
+                <a href="#" class="menu-item">
+
+                    <span>Reviews</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </a>
+            </nav>
+
+            <div class="bottom-menu">
+                <a href="#" class="menu-item">
+                    <i class="bi bi-gear"></i>
+                    <span>Settings</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <i class="bi bi-box-arrow-left"></i>
+                    <span class="logout">Sign Out</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Area -->
+        <main class="main">
+
+
+            <header class="topbar">
+                <div class="search-box">
+                    <input type="text" placeholder="Search products, orders..." />
+                    <i class="bi bi-search"></i>
+                </div>
+
+                <div class="profile">PFP</div>
+            </header>
+
+            <section class="content">
+                <!-- Dashboard Main Content -->
+                <div class="dashboard-content">
+                  
+                  <!-- 1. Top Summary Cards -->
+                  <div class="summary-cards">
+                    <div class="card summary-card">
+                      <div class="card-title">Revenue</div>
+                      <div class="card-value" id="revenue-val">$0.00</div>
+                    </div>
+                    <div class="card summary-card">
+                      <div class="card-title">Total Orders Sold</div>
+                      <div class="card-value" id="orders-val">0</div>
+                    </div>
+                    <div class="card summary-card">
+                      <div class="card-title">Average Rating</div>
+                      <div class="card-value" id="rating-val">0.0 <span class="star">★</span></div>
+                    </div>
+                  </div>
+
+                  <!-- 2. Middle Section: Chart & Top Products -->
+                  <div class="middle-section">
+                    <!-- Chart Area -->
+                    <div class="card chart-container">
+                      <div class="card-title">Sales Chart (Last 7 Days)</div>
+                      <div class="chart-wrapper">
+                        <!-- We will use Chart.js to render the graph -->
+                        <canvas id="salesChart"></canvas>
+                      </div>
+                    </div>
+                    
+                    <!-- Top Products -->
+                    <div class="card top-products-container">
+                      <div class="card-title">My Top 3 Most Sold Products</div>
+                      <ul class="top-products-list" id="top-products-list">
+                        <!-- List items populated by JavaScript -->
+                      </ul>
+                    </div>
+                  </div>
+
+                  <!-- 3. Bottom Section: Recent Orders Table -->
+                  <div class="card recent-orders-container">
+                    <div class="card-title">Recent Orders</div>
+                    <div class="table-responsive">
+                      <table class="recent-orders-table">
+                        <thead>
+                          <tr>
+                            <th>Customer Name</th>
+                            <th>Item Name</th>
+                            <th>Location / Status</th>
+                          </tr>
+                        </thead>
+                        <tbody id="recent-orders-list">
+                           <!-- Table rows populated by JavaScript -->
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="more-link-container">
+                      <a href="#" class="more-link">More...</a>
+                    </div>
+                  </div>
+
+                </div>
+            </section>
+        </main>
+
+    </div>
+    <!-- Import Chart.js from CDN for the Sales Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Replace this with the actual logged-in vendor's ID from your auth system
+        const vendorId = 1; 
+
+        try {
+          // Fetch data from the Express endpoint we created above
+          const response = await fetch(`/api/vendor/dashboard/${vendorId}`);
+          
+          if (!response.ok) {
+            console.error('API error, using fallback data for UI preview.');
+            // Fallback preview data in case the DB isn't set up yet
+            return showPreviewData();
+          }
+          
+          const data = await response.json();
+
+          // 1. Populate Top Summary Cards
+          document.getElementById('revenue-val').innerText = `$${Number(data.revenue).toFixed(2)}`;
+          document.getElementById('orders-val').innerText = data.totalOrders;
+          document.getElementById('rating-val').innerHTML = `${data.averageRating} <span class="star">★</span>`;
+
+          // 2. Populate Top 3 Products
+          const topProductsList = document.getElementById('top-products-list');
+          if (!data.topProducts || data.topProducts.length === 0) {
+            topProductsList.innerHTML = '<li><span>No sales yet!</span></li>';
+          } else {
+            data.topProducts.forEach((product, index) => {
+              const li = document.createElement('li');
+              li.innerHTML = `<span><b>${index + 1}.</b> ${product.name}</span> <span class="sales-count">${product.totalSold} sold</span>`;
+              topProductsList.appendChild(li);
+            });
+          }
+
+          // 3. Populate Recent Orders Table
+          const recentOrdersList = document.getElementById('recent-orders-list');
+          if (data.recentOrders) {
+            data.recentOrders.forEach(order => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td>${order.customer_name}</td>
+                <td>${order.item_name}</td>
+                <td><span style="background: #e3e8ee; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem;">${order.location}</span></td>
+              `;
+              recentOrdersList.appendChild(tr);
+            });
+          }
+
+          // 4. Initialize Chart.js for the Sales Chart
+          initChart(data.salesChart);
+
+        } catch (error) {
+          console.error('Failed to load dashboard data:', error);
+          showPreviewData();
+        }
+
+        function initChart(salesChartData) {
+          const ctx = document.getElementById('salesChart').getContext('2d');
+          const labels = salesChartData.map(item => {
+            const dateObj = new Date(item.date);
+            return dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+          });
+          const chartData = salesChartData.map(item => item.dailyRevenue);
+
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Daily Revenue ($)',
+                data: chartData,
+                borderColor: '#0070f3',
+                backgroundColor: 'rgba(0, 112, 243, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#ffffff',
+                pointBorderColor: '#0070f3',
+                pointRadius: 4
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  backgroundColor: '#1a1f36',
+                  padding: 12,
+                  titleFont: { size: 13, family: 'Inter' },
+                  bodyFont: { size: 14, family: 'Inter', weight: 'bold' }
+                }
+              },
+              scales: {
+                y: { 
+                  beginAtZero: true,
+                  grid: { borderDash: [5, 5], color: '#e3e8ee' },
+                  border: { display: false }
+                },
+                x: { 
+                  grid: { display: false },
+                  border: { display: false }
+                }
+              }
+            }
+          });
+        }
+
+        function showPreviewData() {
+           document.getElementById('revenue-val').innerText = '$4,250.00';
+           document.getElementById('orders-val').innerText = '145';
+           document.getElementById('rating-val').innerHTML = '4.8 <span class="star">★</span>';
+
+           const topProductsList = document.getElementById('top-products-list');
+           topProductsList.innerHTML = `
+              <li><span><b>1.</b> Premium Brake Pads</span> <span class="sales-count">56 sold</span></li>
+              <li><span><b>2.</b> LED Headlight Bulbs</span> <span class="sales-count">34 sold</span></li>
+              <li><span><b>3.</b> Floor Mats Set</span> <span class="sales-count">21 sold</span></li>
+           `;
+
+           const recentOrdersList = document.getElementById('recent-orders-list');
+           recentOrdersList.innerHTML = `
+              <tr><td>John Doe</td><td>Premium Brake Pads</td><td><span style="background: #e3e8ee; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem;">Processing</span></td></tr>
+              <tr><td>Jane Smith</td><td>LED Headlight Bulbs</td><td><span style="background: #e3e8ee; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem;">Shipped</span></td></tr>
+              <tr><td>Michael Lee</td><td>Floor Mats Set</td><td><span style="background: #e3e8ee; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem;">Delivered</span></td></tr>
+           `;
+
+           initChart([
+             { date: '2023-10-01', dailyRevenue: 120 },
+             { date: '2023-10-02', dailyRevenue: 300 },
+             { date: '2023-10-03', dailyRevenue: 150 },
+             { date: '2023-10-04', dailyRevenue: 400 },
+             { date: '2023-10-05', dailyRevenue: 280 },
+             { date: '2023-10-06', dailyRevenue: 500 },
+             { date: '2023-10-07', dailyRevenue: 600 }
+           ]);
+        }
+      });
+    </script>
+</body>
+</html>
