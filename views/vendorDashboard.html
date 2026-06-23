@@ -157,9 +157,9 @@
           const response = await fetch(`/api/vendor/dashboard/${vendorId}`);
           
           if (!response.ok) {
-            console.error('API error, using fallback data for UI preview.');
-            // Fallback preview data in case the DB isn't set up yet
-            return showPreviewData();
+            console.error('API error:', response.status);
+            alert('Failed to load dashboard data from database. Please ensure your database is connected and populated.');
+            return;
           }
           
           const data = await response.json();
@@ -200,7 +200,7 @@
 
         } catch (error) {
           console.error('Failed to load dashboard data:', error);
-          showPreviewData();
+          alert('Failed to load dashboard data. Please check your server and database connection.');
         }
 
         function initChart(salesChartData) {
@@ -255,35 +255,7 @@
           });
         }
 
-        function showPreviewData() {
-           document.getElementById('revenue-val').innerText = '$4,250.00';
-           document.getElementById('orders-val').innerText = '145';
-           document.getElementById('rating-val').innerHTML = '4.8 <span class="star">★</span>';
 
-           const topProductsList = document.getElementById('top-products-list');
-           topProductsList.innerHTML = `
-              <li><span><b>1.</b> Premium Brake Pads</span> <span class="sales-count">56 sold</span></li>
-              <li><span><b>2.</b> LED Headlight Bulbs</span> <span class="sales-count">34 sold</span></li>
-              <li><span><b>3.</b> Floor Mats Set</span> <span class="sales-count">21 sold</span></li>
-           `;
-
-           const recentOrdersList = document.getElementById('recent-orders-list');
-           recentOrdersList.innerHTML = `
-              <tr><td>John Doe</td><td>Premium Brake Pads</td><td><span style="background: #e3e8ee; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem;">Processing</span></td></tr>
-              <tr><td>Jane Smith</td><td>LED Headlight Bulbs</td><td><span style="background: #e3e8ee; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem;">Shipped</span></td></tr>
-              <tr><td>Michael Lee</td><td>Floor Mats Set</td><td><span style="background: #e3e8ee; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem;">Delivered</span></td></tr>
-           `;
-
-           initChart([
-             { date: '2023-10-01', dailyRevenue: 120 },
-             { date: '2023-10-02', dailyRevenue: 300 },
-             { date: '2023-10-03', dailyRevenue: 150 },
-             { date: '2023-10-04', dailyRevenue: 400 },
-             { date: '2023-10-05', dailyRevenue: 280 },
-             { date: '2023-10-06', dailyRevenue: 500 },
-             { date: '2023-10-07', dailyRevenue: 600 }
-           ]);
-        }
       });
     </script>
 </body>
