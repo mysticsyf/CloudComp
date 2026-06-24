@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vendor Dashboard - Reviews</title>
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+        <div data-component="sidebar"></div>
+        
+        <main class="main">
+            <div data-component="topbar"></div>
+
+            <section class="content">
+                <div class="dashboard-content">
+                  
+                  <div class="reviews-summary">
+                    <div class="card summary-card">
+                      <div class="card-title">Average Rating</div>
+                      <div class="card-value" id="avg-rating-val">0.0 <span class="star">★</span></div>
+                    </div>
+                    <div class="card summary-card">
+                      <div class="card-title">Total Reviews</div>
+                      <div class="card-value" id="total-reviews-val">0</div>
+                    </div>
+                    <div class="card summary-card">
+                      <div class="card-title">Positive Rate</div>
+                      <div class="card-value" id="positive-rate-val">0%</div>
+                    </div>
+                  </div>
+
+                  <div class="card reviews-container">
+                    <div class="card-title">Customer Reviews</div>
+                    
+                    <div id="reviews-list">
+                        <div style="text-align: center; color: #a0aec0; padding: 20px;">Loading reviews...</div>
+                    </div>
+
+                  </div>
+
+                </div>
+            </section>
+        </main>
+
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const vendorId = 1; 
+
+        try {
+        const response = await fetch(`/reviews/api/data/${vendorId}`);
+        
+        if (!response.ok) {
+            alert('Failed to load dashboard data from database. Please ensure your database is connected and populated.');
+            return;
+        }
+        
+        const data = await response.json();
+
+        // 1. top summary cards
+        document.getElementById('avg-rating-val').innerHTML = `${Number(data.averageRating).toFixed(1)} <span class="star">★</span>`;
+        document.getElementById('total-reviews-val').innerText = data.totalReviews;
+        document.getElementById('positive-rate-val').innerText = `${data.positiveRate}%`;
+
+        // 2. cards list
+        const reviewsListContainer = document.getElementById('reviews-list');
+        reviewsListContainer.innerHTML = ''; 
+
+        data.reviews.forEach(review => {
+            const card = document.createElement('div');
+            card.className = 'review-card-item';
+            
+            const starsHtml = generateStars(review.rating);
+            const avatarLetter = review.customer_name.charAt(0);
+
+            card.innerHTML = `
+            <div class="review-header">
+                <div class="reviewer-info">
+                    <div class="reviewer-avatar">${avatarLetter}</div>
+                    <div>
+                        <div class="reviewer-name">${review.customer_name}</div>
+                        <div class="review-date">${new Date(review.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+                    </div>
+                </div>
+                <div class="review-rating">${starsHtml}</div>
+            </div>
+            <div class="review-text">${review.review_text}</div>
+            <div class="review-product">
+                <i class="bi bi-box-seam"></i> Product ID [${review.product_id}]: <b>${review.item_name}</b>
+            </div>
+            `;
+            reviewsListContainer.appendChild(card);
+        });
+
+        } catch (error) {
+        console.error('Failed to load data:', error);
+        }
+
+        // generate stars based on rating value
+        function generateStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= Math.floor(rating)) {
+                    stars += '<i class="bi bi-star-fill star-filled"></i> ';
+                } else {
+                    stars += '<i class="bi bi-star star-empty"></i> ';
+                }
+            }
+            return stars;
+        }
+    });
+    </script>
+    <script src="/js/component.js"></script>
+</body>
+</html>
