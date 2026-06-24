@@ -5,7 +5,7 @@ const path = require('path');
 
 // Render the main dashboard layout
 router.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../views/vendorDashboard.html'));
+  res.sendFile(path.join(__dirname, '../views/pages/vendorDashboard.html'));
 });
 
 // Endpoint to fetch all data for the vendor dashboard

@@ -23,7 +23,7 @@ db.getConnection()
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/css', express.static(path.join(__dirname, 'css')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
   req.db = db;
@@ -32,12 +32,14 @@ app.use((req, res, next) => {
 
 // View engine - plain HTML via sendFile for simplicity
 app.set('views', path.join(__dirname, 'views'));
+app.use('/layout', express.static(path.join(__dirname, 'views/layout')));
 
 // Routes
 const dashboardRoutes = require('./routes/dashboard');
 const productsRoutes = require('./routes/products');
 
 app.use('/', dashboardRoutes);
+app.use('/products', productsRoutes);
 
 // 404 handler
 app.use((req, res) => {
