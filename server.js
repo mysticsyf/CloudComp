@@ -37,9 +37,12 @@ app.use('/layout', express.static(path.join(__dirname, 'views/layout')));
 // Routes
 const dashboardRoutes = require('./routes/dashboard');
 const addproductRoutes = require('./routes/addproduct'); 
+const reviewsRoutes = require('./routes/reviews');
 
 app.use('/', dashboardRoutes);
 app.use('/', addproductRoutes);
+app.use('/reviews', reviewsRoutes);
+
 
 // Products Page Route
 app.get('/products', (req, res) => {
@@ -49,6 +52,7 @@ app.get('/products', (req, res) => {
 app.get('/vendor/product/new', (req, res) => {
   res.sendFile(path.join(__dirname, 'views/pages/vendorAddProduct.html'));
 });
+
 
 // 404 handler
 app.use((req, res) => {
