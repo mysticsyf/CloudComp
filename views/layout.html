@@ -1,8 +1,22 @@
-<aside class="sidebar" id="sidebar">
+<!DOCTYPE html>
+<html lang="en">
 
-        <div class="logo" id="toggleSidebar">
-            LOGO
-        </div>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vendor Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">LOGO</div>
 
             <nav class="menu">
                 <a href="#" class="menu-item active">
@@ -11,7 +25,7 @@
                     <i class="bi bi-chevron-right arrow"></i>
                 </a>
 
-                <a href="/products" class="menu-item">
+                <a href="/pages/vendorMyProducts.html" class="menu-item">
                     <i class="bi bi-clipboard-data"></i>
                     <span>My products</span>
                     <i class="bi bi-chevron-right arrow"></i>
@@ -50,3 +64,27 @@
                 </a>
             </div>
         </aside>
+
+        <!-- Main Area -->
+        <main class="main">
+
+
+            <header class="topbar">
+                <div class="search-box">
+                    <input type="text" placeholder="Search products, orders..." />
+                    <i class="bi bi-search"></i>
+                </div>
+
+                <div class="profile">PFP</div>
+            </header>
+
+            <section class="content">
+
+            </section>
+        </main>
+
+    </div>
+
+</body>
+
+</html>

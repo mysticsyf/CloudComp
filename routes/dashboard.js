@@ -93,5 +93,25 @@ router.get('/api/vendor/dashboard/:vendorId', async (req, res) => {
     res.status(500).json({ error: 'Failed to load real dashboard data' });
   }
 });
+// Endpoint to fetch all products for a vendor
+router.get('/api/vendor/products/:vendorId', async (req, res) => {
+  const vendorId = req.params.vendorId;
+  const pool = req.db;
+
+  try {
+    const [products] = await pool.query(
+      `SELECT p.id, p.name, p.price, p.stock, p.image_url,
+              (SELECT AVG(rating) FROM product_reviews pr WHERE pr.product_id = p.id) as rating
+       FROM products p
+       WHERE p.vendor_id = ?`,
+      [vendorId]
+    );
+
+    res.json(products);
+  } catch (error) {
+    console.error('Error fetching products from MySQL:', error);
+    res.status(500).json({ error: 'Failed to load products' });
+  }
+});
 
 module.exports = router;

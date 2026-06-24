@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Products | Vendor</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/vendor.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="layout">
+        <div data-component="sidebar"></div>
+        <main class="main">
+            <div data-component="topbar"></div>
+
+            <section class="content">
+                <div class="myproducts-content">
+
+                    <div class="myproducts-header">
+                        <h2 class="myproducts-title">MY PRODUCTS</h2>
+                        <div class="myproducts-controls">
+                            <div class="myproducts-search-wrap">
+                                <label class="search-label">Search</label>
+                                <div class="myproducts-search-box">
+                                    <input type="text" id="productSearchInput" placeholder="SEARCH OWN PRODUCT" />
+                                    <i class="bi bi-search"></i>
+                                </div>
+                            </div>
+
+                            <!-- Filter Dropdown -->
+                            <div class="myproducts-filter-wrap">
+                                <select id="productFilterSelect" class="filter-dropdown">
+                                    <option value="">FILTER (category/stock)</option>
+                                    <option value="in-stock">In Stock</option>
+                                    <option value="out-of-stock">Out of Stock</option>
+                                    <option value="low-stock">Low Stock</option>
+                                </select>
+                            </div>
+                            <a href="/vendor/product/new">
+                                <button class="btn-add-product">
+                                    <i class="bi bi-plus-lg"></i> ADD A NEW PRODUCT
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="products-list-container">
+                        <div class="products-list" id="productsList">
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/js/products.js"></script>
+    <script src="/js/component.js"></script>
+</body>
+
+</html>
