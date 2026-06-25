@@ -1,9 +1,7 @@
-// routes/dashboard.js
 const express = require('express');
 const router = express.Router();
 const path = require('path');
 
-// Render the main dashboard layout
 router.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../views/pages/vendorDashboard.html'));
 });
@@ -12,7 +10,7 @@ router.get('/', (req, res) => {
 router.get('/api/vendor/dashboard/:vendorId', async (req, res) => {
   const vendorId = req.params.vendorId;
 
-  const pool = req.db; // Renamed to pool so that pool.query works below
+  const pool = req.db; 
 
   try {
     // 1. Get Revenue (Sum of price * quantity for this vendor's sold products)
@@ -113,5 +111,4 @@ router.get('/api/vendor/products/:vendorId', async (req, res) => {
     res.status(500).json({ error: 'Failed to load products' });
   }
 });
-
 module.exports = router;

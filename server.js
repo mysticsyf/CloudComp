@@ -55,6 +55,11 @@ app.get('/vendor/product/:id/edit', (req, res) => {
   res.sendFile(path.join(__dirname, 'views/pages/vendorEditProduct.html'));
 });
 
+// Orders Page Route
+app.get('/orders', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views/pages/vendorOrders.html'));
+});
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).send('<h2>Page not found</h2><a href="/">Back to Dashboard</a>');

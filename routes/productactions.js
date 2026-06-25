@@ -110,4 +110,32 @@ router.delete('/api/vendor/product/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to delete product' });
   }
 });
+// Endpoint to fetch orders for the vendor
+router.get('/api/vendor/orders/:vendorId', async (req, res) => {
+  const vendorId = req.params.vendorId;
+  const pool = req.db;
+
+  try {
+    const [orders] = await pool.query(
+      `SELECT 
+         o.id as order_id, 
+         o.customer_name,
+         oi.status,
+         GROUP_CONCAT(CONCAT(p.name, ' x', oi.quantity) SEPARATOR '|') as items
+       FROM orders o
+       JOIN order_items oi ON o.id = oi.order_id
+       JOIN products p ON oi.product_id = p.id
+       WHERE p.vendor_id = ?
+       GROUP BY o.id, o.customer_name, oi.status
+       ORDER BY o.created_at DESC`,
+      [vendorId]
+    );
+
+    res.json(orders);
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    res.status(500).json({ error: 'Failed to fetch orders' });
+  }
+});
+
 module.exports = router;
