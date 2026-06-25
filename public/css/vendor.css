@@ -1,6 +1,5 @@
-/* =========================
-   DASHBOARD
-========================= */
+/* DASHBOARD */
+
 .dashboard-content {
   padding: 2rem;
   background: #f4f7f6;
@@ -10,9 +9,7 @@
   width: 100%;
 }
 
-/* =========================
-   CARDS
-========================= */
+/*CARDS*/
 .card {
   background: #fff;
   border-radius: 16px;
@@ -49,9 +46,7 @@
   color: #1a1f36;
 }
 
-/* =========================
-   MIDDLE SECTION
-========================= */
+/*MIDDLE SECTION*/
 .middle-section {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -275,16 +270,16 @@
 }
 
 .product-img {
-  width: 60px;
-  height: 60px;
+  width: 100px;
+  height: 105px;
   background: #e5e7eb;
   border-radius: 10px;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 11px;
-  color: #aaa;
+  color: #858585;
   font-weight: 600;
   overflow: hidden;
   flex-shrink: 0;

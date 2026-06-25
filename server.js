@@ -36,23 +36,24 @@ app.use('/layout', express.static(path.join(__dirname, 'views/layout')));
 
 // Routes
 const dashboardRoutes = require('./routes/dashboard');
-const addproductRoutes = require('./routes/addproduct'); 
+const productActionsRoutes = require('./routes/productactions'); 
 const reviewsRoutes = require('./routes/reviews');
 
 app.use('/', dashboardRoutes);
-app.use('/', addproductRoutes);
+app.use('/', productActionsRoutes);
 app.use('/reviews', reviewsRoutes);
 
-
-// Products Page Route
 app.get('/products', (req, res) => {
   res.sendFile(path.join(__dirname, 'views/pages/vendorMyProducts.html'));
 });
-// Render Add Product Page
+
 app.get('/vendor/product/new', (req, res) => {
   res.sendFile(path.join(__dirname, 'views/pages/vendorAddProduct.html'));
 });
 
+app.get('/vendor/product/:id/edit', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views/pages/vendorEditProduct.html'));
+});
 
 // 404 handler
 app.use((req, res) => {

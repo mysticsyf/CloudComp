@@ -14,18 +14,13 @@
 <body>
 
     <div class="layout">
-        <!-- Sidebar -->
         <div data-component="sidebar"></div>
-        <!-- Main Area -->
         <main class="main">
-            <!-- Topbar -->
             <div data-component="topbar"></div>
 
             <section class="content">
-                <!-- Dashboard Main Content -->
                 <div class="dashboard-content">
-                  
-                  <!-- 1. Top Summary Cards -->
+                
                   <div class="summary-cards">
                     <div class="card summary-card">
                       <div class="card-title">Revenue</div>
@@ -40,28 +35,21 @@
                       <div class="card-value" id="rating-val">0.0 <span class="star">★</span></div>
                     </div>
                   </div>
-
-                  <!-- 2. Middle Section: Chart & Top Products -->
                   <div class="middle-section">
-                    <!-- Chart Area -->
                     <div class="card chart-container">
                       <div class="card-title">Sales Chart (Last 7 Days)</div>
                       <div class="chart-wrapper">
-                        <!-- We will use Chart.js to render the graph -->
                         <canvas id="salesChart"></canvas>
                       </div>
                     </div>
                     
-                    <!-- Top Products -->
                     <div class="card top-products-container">
                       <div class="card-title">My Top 3 Most Sold Products</div>
                       <ul class="top-products-list" id="top-products-list">
-                        <!-- List items populated by JavaScript -->
                       </ul>
                     </div>
                   </div>
 
-                  <!-- 3. Bottom Section: Recent Orders Table -->
                   <div class="card recent-orders-container">
                     <div class="card-title">Recent Orders</div>
                     <div class="table-responsive">
@@ -74,7 +62,6 @@
                           </tr>
                         </thead>
                         <tbody id="recent-orders-list">
-                           <!-- Table rows populated by JavaScript -->
                         </tbody>
                       </table>
                     </div>
@@ -82,22 +69,17 @@
                       <a href="#" class="more-link">More...</a>
                     </div>
                   </div>
-
                 </div>
             </section>
         </main>
 
     </div>
-    <!-- Import Chart.js from CDN for the Sales Chart -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
       document.addEventListener("DOMContentLoaded", async () => {
-        // Replace this with the actual logged-in vendor's ID from your auth system
         const vendorId = 1; 
-
         try {
-          // Fetch data from the Express endpoint we created above
           const response = await fetch(`/api/vendor/dashboard/${vendorId}`);
           
           if (!response.ok) {
@@ -108,12 +90,10 @@
           
           const data = await response.json();
 
-          // 1. Populate Top Summary Cards
           document.getElementById('revenue-val').innerText = `$${Number(data.revenue).toFixed(2)}`;
           document.getElementById('orders-val').innerText = data.totalOrders;
           document.getElementById('rating-val').innerHTML = `${data.averageRating} <span class="star">★</span>`;
 
-          // 2. Populate Top 3 Products
           const topProductsList = document.getElementById('top-products-list');
           if (!data.topProducts || data.topProducts.length === 0) {
             topProductsList.innerHTML = '<li><span>No sales yet!</span></li>';
@@ -125,7 +105,6 @@
             });
           }
 
-          // 3. Populate Recent Orders Table
           const recentOrdersList = document.getElementById('recent-orders-list');
           if (data.recentOrders) {
             data.recentOrders.forEach(order => {
@@ -196,8 +175,6 @@
             }
           });
         }
-
-
       });
     </script>
     <script src="/js/component.js"></script>

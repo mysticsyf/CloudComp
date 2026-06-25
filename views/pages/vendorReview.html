@@ -12,9 +12,7 @@
         
     </style>
 </head>
-
 <body>
-
     <div class="layout">
         <div data-component="sidebar"></div>
         
@@ -51,7 +49,6 @@
                 </div>
             </section>
         </main>
-
     </div>
 
     <script>
@@ -67,7 +64,6 @@
         }
         
         const data = await response.json();
-
         // 1. top summary cards
         document.getElementById('avg-rating-val').innerHTML = `${Number(data.averageRating).toFixed(1)} <span class="star">★</span>`;
         document.getElementById('total-reviews-val').innerText = data.totalReviews;
@@ -106,7 +102,6 @@
         } catch (error) {
         console.error('Failed to load data:', error);
         }
-
         // generate stars based on rating value
         function generateStars(rating) {
             let stars = '';
