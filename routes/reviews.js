@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
 
 router.get('/api/data/:vendorId', async (req, res) => {
     const vendorId = req.params.vendorId;
-    const pool = req.db; // 从中间件获取数据库连接池
+    const pool = req.db; 
 
     try {
         const [statsRows] = await pool.query(
