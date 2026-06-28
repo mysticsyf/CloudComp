@@ -56,13 +56,18 @@ document.addEventListener("click", (e) => {
 // Load user profile information from localStorage
 const user = JSON.parse(localStorage.getItem("user"));
 
-const profileImg = document.getElementById("profileImg");
 const profileName = document.getElementById("profileName");
+const profileRole = document.getElementById("profile-role");
+const profileImg = document.getElementById("profileImg");
 
 if (user) {
+  // logged in user
+  profileName.textContent = user.name;
+  profileRole.textContent = user.role || "User";
   profileImg.src = user.avatar || "/images/default-avatar.png";
-  profileName.textContent = user.name || "User";
 } else {
-  profileImg.src = "/images/default-avatar.png";
+  // NOT logged in → show guest only
   profileName.textContent = "Guest";
+  profileRole.textContent = ""; // hide role
+  profileImg.src = "/images/default-avatar.png";
 }
