@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #f4f5f7;
+  color: #252525;
+}
+
+:root {
+  --brand-red: #9f2f1f;
+  --brand-orange: #f25a1d;
+  --orange-dark: #d94a12;
+  --bg: #f4f5f7;
+  --white: #ffffff;
+  --text-dark: #252525;
+  --text-muted: #777;
+  --border: #e5e7eb;
+  --soft-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}

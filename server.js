@@ -3,7 +3,6 @@ const path = require('path');
 const app = express();
 const mysql = require('mysql2/promise'); // Need /promise to use async/await
 
-
 const db = mysql.createPool({ 
   host: 'localhost',
   user: 'root',
@@ -65,6 +64,7 @@ app.use((req, res) => {
   res.status(404).send('<h2>Page not found</h2><a href="/">Back to Dashboard</a>');
 });
 
+// Start the server
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Running on http://localhost:${PORT}`);

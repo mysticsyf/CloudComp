@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
+// Highlight the active sidebar menu item based on the current URL
 function highlightSidebar() {
   const currentPath = window.location.pathname; 
   const currentUrl = window.location.href;     
@@ -37,6 +38,7 @@ function highlightSidebar() {
   });
 }
 
+// Toggle sidebar collapse
 document.addEventListener("click", (e) => {
   const btn = e.target.closest("#toggleSidebar");
   if (!btn) return;
