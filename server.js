@@ -38,6 +38,16 @@ const dashboardRoutes = require('./routes/dashboard');
 const productActionsRoutes = require('./routes/productactions'); 
 const reviewsRoutes = require('./routes/reviews');
 
+// Login Page Route
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views/pages/login.html'));
+});
+
+// Register Page Route
+app.get('/register', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views/pages/register.html'));
+});
+
 app.use('/', dashboardRoutes);
 app.use('/', productActionsRoutes);
 app.use('/reviews', reviewsRoutes);

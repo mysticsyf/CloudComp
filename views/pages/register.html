@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Auto-Equipped | Register</title>
+
+  <link rel="stylesheet" href="/css/register.css" />
+</head>
+<body>
+
+  <main class="register-wrapper">
+    <section class="register-container">
+
+      <h1 class="brand-name">Auto-Equipped</h1>
+
+      <form id="registerForm" class="register-form">
+
+        <div class="input-group">
+          <label for="fullName">Full Name</label>
+          <input 
+            type="text" 
+            id="fullName" 
+            name="fullName" 
+            placeholder="Full Name" 
+            required
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="username">Username</label>
+          <input 
+            type="text" 
+            id="username" 
+            name="username" 
+            placeholder="Username" 
+            required
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="email">E-mail address</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            placeholder="E-mail address" 
+            required
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            placeholder="Password" 
+            required
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input 
+            type="password" 
+            id="confirmPassword" 
+            name="confirmPassword" 
+            placeholder="Confirm Password" 
+            required
+          />
+        </div>
+
+        <div class="role-row">
+            <span>User Role:</span>
+
+            <label>
+                <input type="radio" id="vendor" name="userRole" value="Vendor" />
+                Vendor
+            </label>
+
+            <label>
+                <input type="radio" id="buyer" name="userRole" value="Buyer" />
+                Buyer
+            </label>
+        </div>
+
+        <div class="form-row">
+          <label class="remember-label">
+            <input type="checkbox" id="remember" name="remember" />
+            Remember me
+          </label>
+
+          <a href="/login" class="login-link">Login Here</a>
+        </div>
+
+        <button type="submit" class="register-btn">Register</button>
+
+        <p id="registerMessage" class="register-message"></p>
+
+      </form>
+
+    </section>
+  </main>
+
+  <script src="/js/register.js"></script>
+</body>
+</html>
