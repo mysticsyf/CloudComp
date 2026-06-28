@@ -44,20 +44,20 @@ app.use('/', productActionsRoutes);
 app.use('/reviews', reviewsRoutes);
 
 app.get('/products', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views/pages/vendorMyProducts.html'));
+  res.sendFile(path.join(__dirname, 'views/pages/vendor/vendorMyProducts.html'));
 });
 
 app.get('/vendor/product/new', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views/pages/vendorAddProduct.html'));
+  res.sendFile(path.join(__dirname, 'views/pages/vendor/vendorAddProduct.html'));
 });
 
 app.get('/vendor/product/:id/edit', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views/pages/vendorEditProduct.html'));
+  res.sendFile(path.join(__dirname, 'views/pages/vendor/vendorEditProduct.html'));
 });
 
 // Orders Page Route
 app.get('/orders', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views/pages/vendorOrders.html'));
+  res.sendFile(path.join(__dirname, 'views/pages/vendor/vendorOrders.html'));
 });
 
 // 404 handler

@@ -3,7 +3,11 @@ const router = express.Router();
 const path = require('path');
 
 router.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../views/pages/vendorDashboard.html'));
+  res.sendFile(path.join(__dirname, '../views/pages/Dashboard.html'));
+});
+
+router.get('/vendor/dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, '../views/pages/vendor/vendorDashboard.html'));
 });
 
 // Endpoint to fetch all data for the vendor dashboard

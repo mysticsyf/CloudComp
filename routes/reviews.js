@@ -4,7 +4,7 @@ const router = express.Router();
 const path = require('path');
 
 router.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views/pages/vendorReview.html'));
+    res.sendFile(path.join(__dirname, '../views/pages/vendor/vendorReview.html'));
 });
 
 router.get('/api/data/:vendorId', async (req, res) => {
