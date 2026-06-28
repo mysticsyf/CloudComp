@@ -4,7 +4,8 @@
   background: white;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
+  gap: 15px;
   padding: 0 30px;
   border-bottom: 1px solid #ddd;
   position: sticky;

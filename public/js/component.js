@@ -52,3 +52,17 @@ document.addEventListener("click", (e) => {
 
   sidebar.classList.toggle("collapsed");
 });
+
+// Load user profile information from localStorage
+const user = JSON.parse(localStorage.getItem("user"));
+
+const profileImg = document.getElementById("profileImg");
+const profileName = document.getElementById("profileName");
+
+if (user) {
+  profileImg.src = user.avatar || "/images/default-avatar.png";
+  profileName.textContent = user.name || "User";
+} else {
+  profileImg.src = "/images/default-avatar.png";
+  profileName.textContent = "Guest";
+}
