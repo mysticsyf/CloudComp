@@ -11,8 +11,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (name === "sidebar") {
       highlightSidebar();
+      setupSidebarToggle(); // move toggle here (IMPORTANT)
     }
   }
+
+  loadUserProfile(); // run AFTER everything loads
 });
 
 // Highlight the active sidebar menu item based on the current URL
@@ -39,19 +42,23 @@ function highlightSidebar() {
 }
 
 // Toggle sidebar collapse
-document.addEventListener("click", (e) => {
-  const btn = e.target.closest("#toggleSidebar");
-  if (!btn) return;
+function setupSidebarToggle() {
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("#toggleSidebar");
+    if (!btn) return;
 
-  const sidebar = document.getElementById("sidebar");
+    const sidebar = document.getElementById("sidebar");
+    const rightSide = document.querySelector(".right-side");
+    const topbar = document.querySelector(".topbar");
 
-  if (!sidebar) {
-    console.error("Sidebar still not loaded");
-    return;
-  }
+    if (!sidebar) return;
 
-  sidebar.classList.toggle("collapsed");
-});
+    sidebar.classList.toggle("collapsed");
+
+    if (rightSide) rightSide.classList.toggle("collapsed");
+    if (topbar) topbar.classList.toggle("collapsed");
+  });
+}
 
 // Load user profile information from localStorage
 const user = JSON.parse(localStorage.getItem("user"));

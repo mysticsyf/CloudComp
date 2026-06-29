@@ -1,16 +1,17 @@
-.sidebar {
-  width: 260px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  border-right: 1px solid #ddd;
-  position: sticky;
-  top: 0;
-  transition: 0.3s ease;
-  overflow: hidden;
+.sidebar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:260px;
+    height:100vh;
+    background:white;
+    display:flex;
+    flex-direction:column;
+    border-right:1px solid var(--border);
+    transition:.3s ease;
+    z-index:1000;
 }
 
-.sidebar.collapsed {
-  width: 70px;
+.sidebar.collapsed{
+    width:70px;
 }

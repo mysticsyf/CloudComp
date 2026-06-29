@@ -1,14 +1,21 @@
-.topbar {
-  width: 100%;
-  height: 70px;
-  background: white;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 15px;
-  padding: 0 30px;
-  border-bottom: 1px solid #ddd;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+.topbar{
+    position: fixed;
+    top: 0;
+    left: 260px;
+    right: 0;
+    height: 70px;
+    width: auto;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 15px;
+    padding: 0 30px;
+    border-bottom: 1px solid var(--border);
+    transition: 0.3s ease;
+    z-index: 999;
+}
+
+.topbar.collapsed{
+    left: 70px;
 }
