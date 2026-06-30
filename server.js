@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const mysql = require("mysql2/promise");
+const session = require("express-session");
 
 const app = express();
 
@@ -23,6 +24,16 @@ db.getConnection()
   .catch((err) => {
     console.error("Database connection failed:", err.message);
   });
+
+//session setup
+app.use(session({
+  secret: "auto-equipment-secret-key",
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60 // 1 hour
+  }
+}));
 
 // =========================
 // MIDDLEWARE

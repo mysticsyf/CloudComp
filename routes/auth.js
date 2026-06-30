@@ -73,7 +73,6 @@ router.post("/register", async (req, res) => {
 //login route
 router.post("/login", async (req, res) => {
     const db = req.db;
-
     const { email, password } = req.body;
 
     try {
@@ -117,6 +116,16 @@ router.post("/login", async (req, res) => {
         }
 
         // =========================
+        // SESSION CREATED HERE
+        // =========================
+        req.session.user = {
+            id: user.id,
+            name: user.name,
+            username: user.username,
+            role: user.role
+        };
+
+        // =========================
         // 4. Success
         // =========================
         return res.json({
@@ -137,6 +146,25 @@ router.post("/login", async (req, res) => {
             message: "Server error"
         });
     }
+});
+
+//logout route
+router.get("/logout", (req, res) => {
+    req.session.destroy(() => {
+        res.redirect("/");
+    });
+});
+
+//get current user route
+router.get("/current", (req, res) => {
+    if (!req.session.user) {
+        return res.json({ loggedIn: false });
+    }
+
+    res.json({
+        loggedIn: true,
+        user: req.session.user
+    });
 });
 
 module.exports = router;

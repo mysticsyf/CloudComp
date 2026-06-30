@@ -60,21 +60,30 @@ function setupSidebarToggle() {
   });
 }
 
-// Load user profile information from localStorage
-const user = JSON.parse(localStorage.getItem("user"));
+//load user profile info in the sidebar
+async function loadUserProfile() {
+  try {
+    const res = await fetch("/auth/current");
+    const data = await res.json();
 
-const profileName = document.getElementById("profileName");
-const profileRole = document.getElementById("profile-role");
-const profileImg = document.getElementById("profileImg");
+    const profileName = document.getElementById("profileName");
+    const profileRole = document.getElementById("profile-role");
+    const profileImg = document.getElementById("profileImg");
 
-if (user) {
-  // logged in user
-  profileName.textContent = user.name;
-  profileRole.textContent = user.role || "User";
-  profileImg.src = user.avatar || "/images/default-avatar.png";
-} else {
-  // NOT logged in → show guest only
-  profileName.textContent = "Guest";
-  profileRole.textContent = ""; // hide role
-  profileImg.src = "/images/default-avatar.png";
+    if (!data.loggedIn) {
+      profileName.textContent = "Guest";
+      profileRole.textContent = "";
+      profileImg.src = "/images/default-avatar.png";
+      return;
+    }
+
+    const user = data.user;
+
+    profileName.textContent = user.name;
+    profileRole.textContent = user.role || "User";
+    profileImg.src = user.avatar || "/images/default-avatar.png";
+
+  } catch (err) {
+    console.error("Error loading session user:", err);
+  }
 }
