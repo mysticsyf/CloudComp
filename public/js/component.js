@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const html = await res.text();
       el.innerHTML = html;
 
-      if (name === "sidebar") {
+      if (name === "sidebar" || name === "sidebarVendor") {
         highlightSidebar();
         setupSidebarToggle();
       }
