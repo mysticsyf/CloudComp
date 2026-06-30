@@ -2,12 +2,34 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 
-router.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../views/pages/Dashboard.html'));
+router.get("/", (req, res) => {
+
+  if (!req.session.user) {
+    return res.sendFile(
+      path.join(__dirname, "../views/pages/dashboard.html")
+    );
+  }
+
+  const role = (req.session.user.role || "").toLowerCase();
+
+  if (role === "vendor") {
+    return res.sendFile(
+      path.join(__dirname, "../views/pages/vendor/vendorDashboard.html")
+    );
+  }
+
+  if (role === "buyer") {
+    return res.sendFile(
+      path.join(__dirname, "../views/pages/buyer/buyerDashboard.html")
+    );
+  }
+
+  return res.redirect("/");
 });
 
-router.get('/vendor/dashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, '../views/pages/vendor/vendorDashboard.html'));
+router.get("/test-session", (req, res) => {
+  console.log("SESSION:", req.session);
+  res.json(req.session);
 });
 
 // Endpoint to fetch all data for the vendor dashboard

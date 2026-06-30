@@ -3,10 +3,6 @@ const path = require("path");
 const router = express.Router();
 
 // MAIN PAGES
-router.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../views/pages/dashboard.html"));
-});
-
 router.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "../views/pages/auth/login.html"));
 });
