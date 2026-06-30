@@ -10,6 +10,7 @@ function hashPassword(password) {
     .digest("hex");
 }
 
+//register route
 router.post("/register", async (req, res) => {
 
     const db = req.db;
@@ -62,6 +63,75 @@ router.post("/register", async (req, res) => {
     } catch (err) {
         console.error("REGISTER ERROR:", err);
 
+        return res.status(500).json({
+            success: false,
+            message: "Server error"
+        });
+    }
+});
+
+//login route
+router.post("/login", async (req, res) => {
+    const db = req.db;
+
+    const { email, password } = req.body;
+
+    try {
+        // =========================
+        // 1. Validate input
+        // =========================
+        if (!email || !password) {
+            return res.json({
+                success: false,
+                message: "Please enter email and password"
+            });
+        }
+
+        // =========================
+        // 2. Find user
+        // =========================
+        const [rows] = await db.query(
+            "SELECT * FROM users WHERE email = ?",
+            [email]
+        );
+
+        if (rows.length === 0) {
+            return res.json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        const user = rows[0];
+
+        // =========================
+        // 3. Compare password
+        // =========================
+        const hashedInput = hashPassword(password);
+
+        if (hashedInput !== user.password) {
+            return res.json({
+                success: false,
+                message: "Wrong password"
+            });
+        }
+
+        // =========================
+        // 4. Success
+        // =========================
+        return res.json({
+            success: true,
+            message: "Login successful",
+            user: {
+                id: user.id,
+                name: user.name,
+                username: user.username,
+                role: user.role
+            }
+        });
+
+    } catch (err) {
+        console.error("LOGIN ERROR:", err);
         return res.status(500).json({
             success: false,
             message: "Server error"
