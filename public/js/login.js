@@ -39,16 +39,7 @@ loginForm.addEventListener("submit", async function (event) {
     if (data.success) {
       loginMessage.style.color = "green";
       loginMessage.textContent = data.message;
-
-      // =========================
-      // REMEMBER ME (simple version)
-      // =========================
-      if (remember) {
-        localStorage.setItem("user", JSON.stringify(data.user));
-      } else {
-        sessionStorage.setItem("user", JSON.stringify(data.user));
-      }
-
+      
       // =========================
       // REDIRECT AFTER LOGIN
       // =========================
