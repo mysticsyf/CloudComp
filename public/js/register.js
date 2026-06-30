@@ -1,7 +1,7 @@
 const registerForm = document.getElementById("registerForm");
 const registerMessage = document.getElementById("registerMessage");
 
-registerForm.addEventListener("submit", function (event) {
+registerForm.addEventListener("submit", async function (event) {
   event.preventDefault();
 
   const fullName = document.getElementById("fullName").value.trim();
@@ -9,24 +9,19 @@ registerForm.addEventListener("submit", function (event) {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
   const confirmPassword = document.getElementById("confirmPassword").value.trim();
-  const remember = document.getElementById("remember").checked;
 
-  const selectedRole = document.querySelector('input[name="userRole"]:checked');
-  const userRole = selectedRole ? selectedRole.value : "";
+  const userRole = document.querySelector('input[name="userRole"]:checked')?.value;
 
-  if (
-    fullName === "" ||
-    username === "" ||
-    email === "" ||
-    password === "" ||
-    confirmPassword === ""
-  ) {
+  // =========================
+  // VALIDATION
+  // =========================
+  if (!fullName || !username || !email || !password || !confirmPassword) {
     registerMessage.style.color = "red";
     registerMessage.textContent = "Please fill in all fields.";
     return;
   }
 
-  if (userRole === "") {
+  if (!userRole) {
     registerMessage.style.color = "red";
     registerMessage.textContent = "Please select a user role.";
     return;
@@ -44,14 +39,40 @@ registerForm.addEventListener("submit", function (event) {
     return;
   }
 
-  console.log("Full Name:", fullName);
-  console.log("Username:", username);
-  console.log("Email:", email);
-  console.log("Password:", password);
-  console.log("User Role:", userRole);
-  console.log("Remember me:", remember);
+  try {
+    const res = await fetch("/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: fullName,
+        username: username,
+        email: email,
+        password: password,
+        role: userRole
+      })
+    });
 
-  registerMessage.style.color = "green";
-  registerMessage.textContent = "Registration form submitted successfully.";
+    const data = await res.json();
 
+    if (data.success) {
+      registerMessage.style.color = "green";
+      registerMessage.textContent = data.message;
+
+      // redirect to login
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1000);
+
+    } else {
+      registerMessage.style.color = "red";
+      registerMessage.textContent = data.message;
+    }
+
+  } catch (error) {
+    registerMessage.style.color = "red";
+    registerMessage.textContent = "Server error. Please try again.";
+    console.error(error);
+  }
 });
