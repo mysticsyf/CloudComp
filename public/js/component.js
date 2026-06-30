@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   loadUserProfile();
   initializeProfileBox();
+  initializeLogout();
 });
 
 // Highlight the active sidebar menu item based on the current URL
@@ -117,6 +118,31 @@ function initializeProfileBox() {
     } catch (err) {
       console.error("Session check failed:", err);
       window.location.href = "/login";
+    }
+  });
+}
+
+//Logout
+function initializeLogout() {
+  if (document.body.dataset.logoutBound === "true") return;
+  document.body.dataset.logoutBound = "true";
+
+  document.addEventListener("click", async (event) => {
+    const logoutBtn = event.target.closest("#logoutBtn");
+    if (!logoutBtn) return;
+
+    event.preventDefault();
+
+    try {
+      const res = await fetch("/auth/logout");
+
+      if (res.ok) {
+        window.location.href = "/";
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (err) {
+      console.error("Logout failed:", err);
     }
   });
 }
