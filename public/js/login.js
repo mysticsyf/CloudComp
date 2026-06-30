@@ -6,7 +6,6 @@ loginForm.addEventListener("submit", async function (event) {
 
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
-  const remember = document.getElementById("remember").checked;
 
   // =========================
   // VALIDATION
@@ -16,10 +15,6 @@ loginForm.addEventListener("submit", async function (event) {
     loginMessage.textContent = "Please enter your email and password.";
     return;
   }
-
-  console.log("Email:", email);
-  console.log("Password:", password);
-  console.log("Remember me:", remember);
 
   try {
     // =========================
@@ -44,18 +39,7 @@ loginForm.addEventListener("submit", async function (event) {
     if (data.success) {
       loginMessage.style.color = "green";
       loginMessage.textContent = data.message;
-
-      console.log("Logged in user:", data.user);
-
-      // =========================
-      // REMEMBER ME (simple version)
-      // =========================
-      if (remember) {
-        localStorage.setItem("user", JSON.stringify(data.user));
-      } else {
-        sessionStorage.setItem("user", JSON.stringify(data.user));
-      }
-
+      
       // =========================
       // REDIRECT AFTER LOGIN
       // =========================

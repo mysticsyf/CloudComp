@@ -11,10 +11,6 @@ router.get("/register", (req, res) => {
   res.sendFile(path.join(__dirname, "../views/pages/auth/register.html"));
 });
 
-router.get("/profile", (req, res) => {
-  res.sendFile(path.join(__dirname, "../views/pages/profile.html"));
-});
-
 // VENDOR PAGES
 router.get("/products", (req, res) => {
   res.sendFile(path.join(__dirname, "../views/pages/vendor/vendorMyProducts.html"));
@@ -43,6 +39,31 @@ router.get('/payment', (req, res) => {
 
 router.get('/cart', (req, res) => {
   res.sendFile(path.join(__dirname, '../views/pages/buyer/cart.html'));
+});
+
+//PROFILE PAGE
+router.get("/profile", (req, res) => {
+  if (!req.session.user) {
+      return res.sendFile(
+        path.join(__dirname, "../views/pages/auth/login.html")
+      );
+    }
+  
+    const role = (req.session.user.role || "").toLowerCase();
+  
+    if (role === "vendor") {
+      return res.sendFile(
+        path.join(__dirname, "../views/pages/vendor/vendorProfile.html")
+      );
+    }
+  
+    if (role === "buyer") {
+      return res.sendFile(
+        path.join(__dirname, "../views/pages/buyer/Profile.html")
+      );
+    }
+  
+    return res.redirect("/");
 });
 
 module.exports = router;
