@@ -27,23 +27,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // Highlight the active sidebar menu item based on the current URL
 function highlightSidebar() {
-  const currentPath = window.location.pathname; 
-  const currentUrl = window.location.href;     
-
-  const menuItems = document.querySelectorAll(".sidebar .menu-item, [data-component='sidebar'] .menu-item");
+  const currentPath = window.location.pathname;
+  const menuItems = document.querySelectorAll(".menu-item");
 
   menuItems.forEach(item => {
     item.classList.remove("active");
 
     const href = item.getAttribute("href");
+    if (!href) return;
 
+    if (href === "/") {
+      if (currentPath === "/") item.classList.add("active");
+      return;
+    }
 
-    if (
-      currentPath === href || 
-      (href !== "#" && currentPath.includes(href)) || 
-      item.href === currentUrl
-    ) {
-      item.classList.add("active"); 
+    // match prefix safely
+    if (currentPath.startsWith(href) && href !== "/") {
+      item.classList.add("active");
     }
   });
 }
