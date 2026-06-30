@@ -60,7 +60,7 @@ function setupSidebarToggle() {
   });
 }
 
-//load user profile info in the sidebar
+//load user profile
 async function loadUserProfile() {
   try {
     const res = await fetch("/auth/current");
@@ -79,7 +79,7 @@ async function loadUserProfile() {
 
     const user = data.user;
 
-    profileName.textContent = user.name;
+    profileName.textContent = user.username;
     profileRole.textContent = user.role || "User";
     profileImg.src = user.avatar || "/images/default-avatar.png";
 

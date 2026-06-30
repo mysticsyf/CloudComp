@@ -9,7 +9,6 @@ registerForm.addEventListener("submit", async function (event) {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
   const confirmPassword = document.getElementById("confirmPassword").value.trim();
-
   const userRole = document.querySelector('input[name="userRole"]:checked')?.value;
 
   // =========================
@@ -60,10 +59,12 @@ registerForm.addEventListener("submit", async function (event) {
       registerMessage.style.color = "green";
       registerMessage.textContent = data.message;
 
-      // redirect to login
-      setTimeout(() => {
-        window.location.href = "/login";
-      }, 1000);
+      // =========================
+      // REDIRECT AFTER LOGIN
+      // =========================
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 1000);
 
     } else {
       registerMessage.style.color = "red";

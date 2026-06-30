@@ -55,6 +55,16 @@ router.post("/register", async (req, res) => {
             [username, name, email, hashedPassword, cleanRole]
         );
 
+        // =========================
+        // SESSION CREATED HERE
+        // =========================
+        req.session.user = {
+            id: user.id,
+            name: user.name,
+            username: user.username,
+            role: user.role
+        };
+
         return res.json({
             success: true,
             message: "Registration successful"
