@@ -146,3 +146,22 @@ function initializeLogout() {
     }
   });
 }
+
+// Apply role-based permissions to sidebar items
+function applySidebarPermissions() {
+  const role = window.currentUserRole;
+
+  if (!role) return;
+
+  // hide vendor-only items for buyers
+  if (role === "buyer") {
+    document.querySelectorAll(".vendor-only")
+      .forEach(el => el.style.display = "none");
+  }
+
+  // hide buyer-only items for vendors
+  if (role === "vendor") {
+    document.querySelectorAll(".buyer-only")
+      .forEach(el => el.style.display = "none");
+  }
+}
