@@ -32,4 +32,17 @@ router.get("/orders", (req, res) => {
   res.sendFile(path.join(__dirname, "../views/pages/vendor/vendorOrders.html"));
 });
 
+// BUYER PAGES
+router.get("/item", (req, res) => {
+  res.sendFile(path.join(__dirname, '../views/pages/buyer/itemPage.html'));
+});
+
+router.get('/payment', (req, res) => {
+  res.sendFile(path.join(__dirname, '../views/pages/buyer/payment.html'));
+});
+
+router.get('/cart', (req, res) => {
+  res.sendFile(path.join(__dirname, '../views/pages/buyer/cart.html'));
+});
+
 module.exports = router;
