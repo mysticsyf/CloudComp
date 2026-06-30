@@ -4,18 +4,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   for (const el of components) {
     const name = el.getAttribute("data-component");
 
-    const res = await fetch(`/layout/${name}.html`);
-    const html = await res.text();
+    try {
+      const res = await fetch(`/layout/${name}.html`);
+      if (!res.ok) continue;
 
-    el.innerHTML = html;
+      const html = await res.text();
+      el.innerHTML = html;
 
-    if (name === "sidebar") {
-      highlightSidebar();
-      setupSidebarToggle(); // move toggle here (IMPORTANT)
+      if (name === "sidebar") {
+        highlightSidebar();
+        setupSidebarToggle();
+      }
+    } catch (err) {
+      console.error(`Failed to load component ${name}:`, err);
     }
   }
 
-  loadUserProfile(); // run AFTER everything loads
+  loadUserProfile();
+  initializeProfileBox();
 });
 
 // Highlight the active sidebar menu item based on the current URL
@@ -86,4 +92,31 @@ async function loadUserProfile() {
   } catch (err) {
     console.error("Error loading session user:", err);
   }
+}
+
+//ProfileBox
+function initializeProfileBox() {
+  if (document.body.dataset.profileBoxBound === "true") return;
+  document.body.dataset.profileBoxBound = "true";
+
+  document.addEventListener("click", async (event) => {
+    const profileBox = event.target.closest("#profileBox");
+    if (!profileBox) return;
+
+    event.preventDefault();
+
+    try {
+      const res = await fetch("/auth/current");
+      const data = await res.json();
+
+      if (data.loggedIn) {
+        window.location.href = "/profile";
+      } else {
+        window.location.href = "/login";
+      }
+    } catch (err) {
+      console.error("Session check failed:", err);
+      window.location.href = "/login";
+    }
+  });
 }

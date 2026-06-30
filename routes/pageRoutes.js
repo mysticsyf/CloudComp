@@ -8,11 +8,15 @@ router.get("/", (req, res) => {
 });
 
 router.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "../views/pages/login.html"));
+  res.sendFile(path.join(__dirname, "../views/pages/auth/login.html"));
 });
 
 router.get("/register", (req, res) => {
-  res.sendFile(path.join(__dirname, "../views/pages/register.html"));
+  res.sendFile(path.join(__dirname, "../views/pages/auth/register.html"));
+});
+
+router.get("/profile", (req, res) => {
+  res.sendFile(path.join(__dirname, "../views/pages/profile.html"));
 });
 
 // VENDOR PAGES
