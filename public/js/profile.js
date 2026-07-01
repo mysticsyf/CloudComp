@@ -46,3 +46,65 @@ async function loadProfile() {
     }
 
 }
+
+const avatarModal = document.getElementById("avatarModal");
+
+document
+.getElementById("changePhotoBtn")
+.addEventListener("click",()=>{
+
+    avatarModal.classList.add("show");
+
+});
+
+document
+.getElementById("cancelAvatarBtn")
+.addEventListener("click",()=>{
+
+    avatarModal.classList.remove("show");
+
+});
+
+document
+.getElementById("uploadAvatarBtn")
+.addEventListener("click",uploadAvatar);
+
+async function uploadAvatar(){
+
+    const input=document.getElementById("avatarInput");
+
+    if(input.files.length===0){
+
+        alert("Please choose an image.");
+        return;
+
+    }
+
+    const formData=new FormData();
+
+    formData.append("avatar",input.files[0]);
+
+    const res=await fetch("/auth/upload-avatar",{
+
+        method:"POST",
+
+        body:formData
+
+    });
+
+    const data=await res.json();
+
+    if(data.success){
+
+        document.getElementById("profileImage").src=
+            data.avatar+"?"+Date.now();
+
+        avatarModal.classList.remove("show");
+
+    }else{
+
+        alert(data.message);
+
+    }
+
+}
