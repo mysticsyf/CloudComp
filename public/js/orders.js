@@ -54,7 +54,7 @@ function displayOrders(orders) {
             </div>
             
             <div class="order-actions-col">
-                <button class="btn-action btn-view">VIEW</button>
+            <button class="btn-action btn-view" onclick="window.location.href='/tracking/${order.order_id}'">VIEW</button>
             </div>
         `;
         list.appendChild(row);

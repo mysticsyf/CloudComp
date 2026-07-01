@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vendor Dashboard - Tracking</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="layout">
+        <div data-component="sidebarVendor"></div>
+
+        <main class="main">
+            <div data-component="topbar"></div>
+
+            <section class="content">
+                <div class="dashboard-content">
+                    <div class="tracking-title">Tracking page - Seller</div>
+
+                    <div class="progress-timeline" id="progress-timeline">
+                        <div class="progress-step" data-status="To Ship"><div class="step-circle"></div><div class="step-label">To Ship</div></div>
+                        <div class="progress-step" data-status="Picked Up"><div class="step-circle"></div><div class="step-label">Picked Up</div></div>
+                        <div class="progress-step" data-status="In Transit"><div class="step-circle"></div><div class="step-label">In Transit</div></div>
+                        <div class="progress-step" data-status="Delivery"><div class="step-circle"></div><div class="step-label">Delivery</div></div>
+                        <div class="progress-step" data-status="Delivered"><div class="step-circle"></div><div class="step-label">Delivered</div></div>
+                    </div>
+
+                    <div class="tracking-number-text" id="tracking-no-display">Tracking Number: Loading...</div>
+
+                    <div class="log-container" id="log-list-box"></div>
+
+                    <div class="action-buttons">
+                        <button class="btn-track" id="btn-ToShip" onclick="updateStatus('To Ship', 'Seller ready to ship your parcel')">Update "To Ship"</button>
+                        <button class="btn-track" id="btn-PickedUp" onclick="updateStatus('Picked Up', 'Parcel picked up by Courier Service')">Update "Picked Up by CS"</button>
+                        <button class="btn-track" id="btn-InTransit" onclick="updateStatus('In Transit', 'Parcel is arrived to Transit Centre')">Update "In Transit"</button>
+                        <button class="btn-track" id="btn-Delivery" onclick="updateStatus('Delivery', 'Out for delivery')">Update "Delivery"</button>
+                        <button class="btn-track" id="btn-Delivered" onclick="updateStatus('Delivered', 'Package is received by customer')">Update "Delivered"</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const pathSegments = window.location.pathname.split('/');
+        const orderId = pathSegments[pathSegments.length - 1] || 1;
+
+        document.addEventListener("DOMContentLoaded", fetchTrackingData);
+
+        async function fetchTrackingData() {
+            try {
+                const response = await fetch(`/tracking/api/data/${orderId}`);
+                if (!response.ok) return;
+                const data = await response.json();
+
+                document.getElementById('tracking-no-display').innerText = `Tracking Number: ${data.trackingNumber}`;
+                
+                updateProgressCircles(data.currentStatus);
+                renderLogs(data.logs);
+                
+                // execute the logic to disable button until next step is reached
+                disableExceptNext(data.currentStatus);
+
+            } catch (err) {
+                console.error("Error loading tracking page:", err);
+            }
+        }
+
+        function updateProgressCircles(currentStatus) {
+            const statuses = ["To Ship", "Picked Up", "In Transit", "Delivery", "Delivered"];
+            const currentIndex = statuses.indexOf(currentStatus);
+            
+            document.querySelectorAll('.progress-step').forEach((step, idx) => {
+                if (idx <= currentIndex) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+        }
+
+        function disableExceptNext(currentStatus) {
+            // follow the order of the tracking step
+            const statuses = ["To Ship", "Picked Up", "In Transit", "Delivery", "Delivered"];
+            
+            let currentIndex = statuses.indexOf(currentStatus);
+            
+            if (currentStatus === "Order Placed") {
+                currentIndex = -1;
+            }
+
+            const btnMap = {
+                "To Ship": document.getElementById('btn-ToShip'),
+                "Picked Up": document.getElementById('btn-PickedUp'),
+                "In Transit": document.getElementById('btn-InTransit'),
+                "Delivery": document.getElementById('btn-Delivery'),
+                "Delivered": document.getElementById('btn-Delivered')
+            };
+
+            statuses.forEach((status, idx) => {
+                if (btnMap[status]) {
+                    if (idx === currentIndex + 1) {
+                        btnMap[status].disabled = false;
+                    } else {
+                        btnMap[status].disabled = true;
+                    }
+                }
+            });
+        }
+
+        function renderLogs(logs) {
+            const container = document.getElementById('log-list-box');
+            container.innerHTML = '';
+
+            if (!logs || logs.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #a0aec0; padding: 20px;">No tracking logs available yet.</div>';
+                return;
+            }
+
+            const groups = {};
+            logs.forEach(log => {
+                const d = new Date(log.created_at);
+                const dateStr = d.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+                if (!groups[dateStr]) groups[dateStr] = [];
+                groups[dateStr].push(log);
+            });
+
+            for (const dateKey in groups) {
+                const dateGroupDiv = document.createElement('div');
+                dateGroupDiv.className = 'date-group';
+                dateGroupDiv.innerHTML = `<div class="date-header">${dateKey}</div>`;
+
+                groups[dateKey].forEach(item => {
+                    const t = new Date(item.created_at);
+                    const timeStr = t.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+                    
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'log-item';
+                    itemDiv.innerHTML = `
+                        <div class="log-time-status">${timeStr} - <b>${item.status}</b><div class="log-desc">${item.description}</div></div>
+                    `;
+                    dateGroupDiv.appendChild(itemDiv);
+                });
+                container.appendChild(dateGroupDiv);
+            }
+        }
+
+        async function updateStatus(status, description) {
+            try {
+                const response = await fetch(`/tracking/api/update/${orderId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status, description })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    fetchTrackingData(); 
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    </script>
+    <script src="/js/component.js"></script>
+</body>
+</html>

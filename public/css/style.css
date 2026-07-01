@@ -542,6 +542,119 @@ body {
 .star-filled { color: #ffb800; }
 .star-empty { color: #e2e8f0; }
 
+
+/* tracking_page */
+.tracking-title {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 25px;
+    color: #1a1f36;
+}
+.progress-timeline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: #fff;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    position: relative;
+}
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+    flex: 1;
+}
+.step-circle {
+    width: 45px;
+    height: 45px;
+    background: #e2e8f0;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    transition: all 0.3s;
+}
+.progress-step.active .step-circle {
+    background: #52ec52; 
+    box-shadow: 0 0 10px rgba(82, 236, 82, 0.5);
+}
+.step-label {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #718096;
+}
+.progress-step.active .step-label {
+    color: #1a202c;
+    font-weight: 600;
+}
+.tracking-number-text {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #4a5568;
+}
+.log-container {
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 25px;
+}
+.date-group {
+    margin-bottom: 25px;
+}
+.date-header {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #2d3748;
+    margin-bottom: 12px;
+}
+.log-item {
+    display: flex;
+    gap: 20px;
+    padding-left: 15px;
+    margin-bottom: 15px;
+    position: relative;
+}
+.log-time-status {
+    font-size: 0.95rem;
+    color: #1a202c;
+}
+.log-time-status b {
+    color: #000;
+}
+.log-desc {
+    font-size: 0.95rem;
+    color: #718096;
+    margin-top: 2px;
+}
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+.btn-track {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: white;
+    background-color: #0099ff;
+    transition: all 0.2s;
+}
+.btn-track:hover { opacity: 0.9; }
+
+.btn-track:disabled {
+    background-color: #cbd5e0 !important;
+    color: #718096 !important;
+    cursor: not-allowed;
+    opacity: 1 !important;
+}
+
 /* =========================
    RESPONSIVE
 ========================= */

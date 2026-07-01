@@ -37,6 +37,7 @@ app.use('/layout', express.static(path.join(__dirname, 'views/layout')));
 const dashboardRoutes = require('./routes/dashboard');
 const productActionsRoutes = require('./routes/productactions'); 
 const reviewsRoutes = require('./routes/reviews');
+const trackingRouter = require('./routes/tracking');
 
 // Login Page Route
 app.get('/login', (req, res) => {
@@ -51,6 +52,7 @@ app.get('/register', (req, res) => {
 app.use('/', dashboardRoutes);
 app.use('/', productActionsRoutes);
 app.use('/reviews', reviewsRoutes);
+app.use('/tracking', trackingRouter);
 
 app.get('/products', (req, res) => {
   res.sendFile(path.join(__dirname, 'views/pages/vendor/vendorMyProducts.html'));
