@@ -141,24 +141,30 @@
                     <!-- Buyer Only -->
                     <section class="content-card buyer-section">
 
-                        <div class="card-header">
-                            <h2>Shipping Address</h2>
+                    <div class="card-header">
+                        <h2>Shipping Address</h2>
+                    </div>
+
+                    <!-- Add new address -->
+                    <div class="form-grid">
+
+                        <div class="form-group full-width">
+                            <label>New Address</label>
+                            <textarea rows="3" id="newAddress"></textarea>
                         </div>
 
-                        <div class="form-grid">
+                    </div>
 
-                            <div class="form-group full-width">
-                                <label>Address</label>
-                                <textarea rows="4"></textarea>
-                            </div>
+                    <div class="card-actions">
+                        <button class="btn-primary" id="addAddressBtn">
+                            Add Address
+                        </button>
+                    </div>
 
-                        </div>
+                    <!-- Address list -->
+                    <div id="addressList"></div>
 
-                        <div class="card-actions">
-                            <button class="btn-primary">Save Address</button>
-                        </div>
-
-                    </section>
+                </section>
 
                     <!--Hidden form-->
                     <div class="modal" id="avatarModal">

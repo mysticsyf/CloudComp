@@ -356,4 +356,44 @@ router.post("/change-password", async (req, res) => {
     }
 });
 
+router.get("/addresses", async (req, res) => {
+
+    if (!req.session.user) return res.json([]);
+
+    const [rows] = await req.db.query(
+        "SELECT * FROM user_addresses WHERE user_id=?",
+        [req.session.user.id]
+    );
+
+    res.json(rows);
+});
+
+router.post("/addresses", async (req, res) => {
+
+    if (!req.session.user) {
+        return res.json({ success: false });
+    }
+
+    const { address } = req.body;
+
+    await req.db.query(
+        "INSERT INTO user_addresses (user_id, address) VALUES (?, ?)",
+        [req.session.user.id, address]
+    );
+
+    res.json({ success: true });
+});
+
+router.delete("/addresses/:id", async (req, res) => {
+
+    const id = req.params.id;
+
+    await req.db.query(
+        "DELETE FROM user_addresses WHERE id=? AND user_id=?",
+        [id, req.session.user.id]
+    );
+
+    res.json({ success: true });
+});
+
 module.exports = router;

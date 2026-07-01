@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     loadProfile();
+    loadAddresses();
 });
 
 async function loadProfile() {
@@ -219,4 +220,71 @@ async function changePassword() {
         console.error(err);
         alert("Error changing password");
     }
+}
+
+async function loadAddresses() {
+
+    const res = await fetch("/auth/addresses");
+    const data = await res.json();
+
+    const container = document.getElementById("addressList");
+    container.innerHTML = "";
+
+    data.forEach(addr => {
+
+        const div = document.createElement("div");
+        div.className = "address-item";
+
+        div.innerHTML = `
+            <span>${addr.address}</span>
+            <button onclick="deleteAddress(${addr.id})">Delete</button>
+        `;
+
+        container.appendChild(div);
+
+    });
+}
+
+document.getElementById("addAddressBtn").addEventListener("click", async () => {
+
+    const address = document.getElementById("newAddress").value.trim();
+
+    if (!address) {
+        alert("Address cannot be empty");
+        return;
+    }
+
+    const res = await fetch("/auth/addresses", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ address })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+        document.getElementById("newAddress").value = "";
+        loadAddresses();
+    } else {
+        alert(data.message);
+    }
+
+});
+
+async function deleteAddress(id) {
+
+    const res = await fetch(`/auth/addresses/${id}`, {
+        method: "DELETE"
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+        loadAddresses();
+    } else {
+        alert(data.message);
+    }
+
 }

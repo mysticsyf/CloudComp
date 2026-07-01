@@ -145,18 +145,24 @@
                             <h2>Shipping Address</h2>
                         </div>
 
+                        <!-- Add new address -->
                         <div class="form-grid">
 
                             <div class="form-group full-width">
-                                <label>Address</label>
-                                <textarea rows="4"></textarea>
+                                <label>New Address</label>
+                                <textarea rows="3" id="newAddress"></textarea>
                             </div>
 
                         </div>
 
                         <div class="card-actions">
-                            <button class="btn-primary">Save Address</button>
+                            <button class="btn-primary" id="addAddressBtn">
+                                Add Address
+                            </button>
                         </div>
+
+                        <!-- Address list -->
+                        <div id="addressList"></div>
 
                     </section>
                     <div class="modal" id="avatarModal">
