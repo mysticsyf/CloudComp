@@ -53,6 +53,10 @@ router.get('/buyer-review', (req, res) => {
   res.sendFile(path.join(__dirname, '../views/pages/buyer/buyerReview.html'));
 });
 
+router.get('/buyer-checkout', (req, res) => {
+  res.sendFile(path.join(__dirname, '../views/pages/buyer/buyerCheckout.html'));
+});
+
 //PROFILE PAGE
 router.get("/profile", (req, res) => {
   if (!req.session.user) {

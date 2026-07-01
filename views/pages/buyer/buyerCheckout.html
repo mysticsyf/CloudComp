@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>AutoEquip | Checkout</title>
+
+    <link rel="stylesheet" href="/css/main.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="layout">
+        <div data-component="sidebar"></div>
+
+        <div class="right-side">
+            <div data-component="topbar"></div>
+
+            <main class="main checkout-main">
+
+                <section class="checkout-page">
+
+                    <div class="checkout-title">
+                        <h1>Checkout</h1>
+                    </div>
+
+                    <div class="checkout-content">
+
+                        <!-- Left Side -->
+                        <div class="checkout-left">
+
+                            <div class="checkout-box">
+                                <h2>Delivery Address</h2>
+
+                                <div class="address-card">
+                                    <p class="customer-name">Guest User</p>
+                                    <p>Phone: 012-3456789</p>
+                                    <p>
+                                        Address: No. 1, Jalan Example, Kuala Lumpur,
+                                        Malaysia
+                                    </p>
+
+                                    <button class="change-btn">Change Address</button>
+                                </div>
+                            </div>
+
+                            <div class="checkout-box">
+                                <h2>Order Items</h2>
+
+                                <div class="checkout-item">
+                                    <div class="item-img">ITEM PNG</div>
+
+                                    <div class="item-details">
+                                        <h3>Item name</h3>
+                                        <p>Vendor Name</p>
+                                        <p>Quantity: 1</p>
+                                    </div>
+
+                                    <p class="item-price">RM 123</p>
+                                </div>
+
+                                <div class="checkout-item">
+                                    <div class="item-img">ITEM PNG</div>
+
+                                    <div class="item-details">
+                                        <h3>Item name</h3>
+                                        <p>Vendor Name</p>
+                                        <p>Quantity: 1</p>
+                                    </div>
+
+                                    <p class="item-price">RM 123</p>
+                                </div>
+                            </div>
+
+                            <div class="checkout-box">
+                                <h2>Payment Method</h2>
+
+                                <label class="option-row">
+                                    <input type="radio" name="paymentMethod" checked />
+                                    <span>Online Banking</span>
+                                </label>
+
+                                <label class="option-row">
+                                    <input type="radio" name="paymentMethod" />
+                                    <span>Credit / Debit Card</span>
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <!-- Right Side -->
+                        <div class="checkout-right">
+
+                            <div class="summary-box">
+                                <h2>Order Summary</h2>
+
+                                <div class="summary-row">
+                                    <span>Subtotal</span>
+                                    <span>RM 246</span>
+                                </div>
+
+                                <div class="summary-row">
+                                    <span>Delivery Fee</span>
+                                    <span>RM 10</span>
+                                </div>
+
+                                <div class="summary-row">
+                                    <span>Tax</span>
+                                    <span>RM 12</span>
+                                </div>
+
+                                <hr />
+
+                                <div class="summary-row final-row">
+                                    <span>Total</span>
+                                    <span>RM 268</span>
+                                </div>
+
+                                <a href="/payment" class="place-order-btn">
+                                    <i class="bi bi-credit-card"></i>
+                                    Place Order
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <script src="/js/component.js"></script>
+</body>
+</html>
