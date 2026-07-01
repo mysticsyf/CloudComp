@@ -1,0 +1,147 @@
+.track-main {
+    width: 100%;
+    max-width: none;
+    padding: 80px 0 0 0;
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+.track-page {
+    width: 100%;
+    min-height: calc(100vh - 80px);
+    padding: 25px 40px;
+    background-color: #f4f4f4;
+}
+
+.track-order-card {
+    width: 100%;
+    background-color: #d9d9d9;
+    padding: 22px;
+}
+
+.track-order-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    margin-bottom: 18px;
+}
+
+.track-product-section {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 25px;
+    background-color: #ffffff;
+    padding: 15px;
+    margin-bottom: 35px;
+}
+
+.track-product-img {
+    width: 100px;
+    height: 90px;
+    background-color: #eeeeee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+}
+
+.track-product-info h2 {
+    font-size: 25px;
+    font-weight: 400;
+    margin-bottom: 8px;
+}
+
+.track-product-info p {
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.tracking-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 35px 0;
+}
+
+.track-step {
+    text-align: center;
+}
+
+.circle {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background-color: #bfbfbf;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 25px;
+    margin: 0 auto 8px auto;
+}
+
+.track-step.active .circle {
+    background-color: #ff7518;
+}
+
+.track-step p {
+    font-size: 15px;
+}
+
+.track-line {
+    width: 140px;
+    height: 5px;
+    background-color: #bfbfbf;
+    margin: 0 10px 25px 10px;
+}
+
+.active-line {
+    background-color: #ff7518;
+}
+
+.track-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.received-btn {
+    height: 45px;
+    min-width: 170px;
+    border: none;
+    background-color: #ff7518;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.received-btn:hover {
+    background-color: #f06400;
+}
+
+@media (max-width: 850px) {
+    .tracking-status {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .track-line {
+        width: 5px;
+        height: 50px;
+        margin: 0;
+    }
+
+    .track-order-header {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 600px) {
+    .track-product-section {
+        grid-template-columns: 1fr;
+    }
+
+    .track-footer {
+        justify-content: flex-start;
+    }
+}

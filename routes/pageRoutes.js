@@ -45,6 +45,14 @@ router.get('/payment-orders', (req, res) => {
   res.sendFile(path.join(__dirname, '../views/pages/buyer/paymentOrders.html'));
 });
 
+router.get('/track-orders', (req, res) => {
+  res.sendFile(path.join(__dirname, '../views/pages/buyer/trackOrders.html'));
+});
+
+router.get('/buyer-review', (req, res) => {
+  res.sendFile(path.join(__dirname, '../views/pages/buyer/buyerReview.html'));
+});
+
 //PROFILE PAGE
 router.get("/profile", (req, res) => {
   if (!req.session.user) {
