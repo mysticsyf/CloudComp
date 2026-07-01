@@ -55,6 +55,13 @@ router.post("/register", async (req, res) => {
             [username, name, email, hashedPassword, cleanRole]
         );
 
+        const [rows] = await db.query(
+            "SELECT * FROM users WHERE email = ?",
+            [email]
+        );
+
+        const user = rows[0];
+
         // =========================
         // SESSION CREATED HERE
         // =========================
@@ -67,7 +74,13 @@ router.post("/register", async (req, res) => {
 
         return res.json({
             success: true,
-            message: "Registration successful"
+            message: "Registration successful",
+            user: {
+                id: user.id,
+                name: user.name,
+                username: user.username,
+                role: user.role
+            }
         });
 
     } catch (err) {
