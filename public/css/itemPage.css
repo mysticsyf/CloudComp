@@ -1,24 +1,68 @@
-.item-page {
+.layout {
     width: 100%;
-    min-height: calc(100vh - 80px);
+}
+
+.right-side {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+}
+
+.item-main {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 70px 0 0 0 !important;
+    margin: 0 !important;
     background-color: #d9d9d9;
+    display: block;
+}
+
+.item-page {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: calc(100vh - 160px);
+    background-color: #d9d9d9;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 /* Product Section */
 .product-section {
-    width: 100%;
+    width: 100% !important;
+    max-width: none !important;
     background-color: #ffffff;
-    padding: 28px 40px 18px 40px;
+    padding: 45px 70px 35px 70px;
 
     display: grid;
-    grid-template-columns: 35px 250px 35px 1fr;
+    grid-template-columns: 40px 330px 40px minmax(350px, 1fr);
     align-items: center;
-    gap: 20px;
+    gap: 35px;
+}
+
+/* Vendor Section */
+.vendor-section {
+    width: 100% !important;
+    max-width: none !important;
+    background-color: #d9d9d9;
+    padding: 35px 70px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Reviews Section */
+.reviews-section {
+    width: 100% !important;
+    max-width: none !important;
+    background-color: #d9d9d9;
+    padding: 45px 60px;
+    margin-top: 0;
 }
 
 .product-image-box {
-    width: 250px;
-    height: 210px;
+    width: 330px;
+    height: 260px;
     border: 1px solid #555;
     background-color: #ffffff;
     padding: 8px;
@@ -111,17 +155,6 @@
     background-color: #c7c7c7;
 }
 
-/* Vendor Section */
-.vendor-section {
-    width: 100%;
-    background-color: #d9d9d9;
-    padding: 18px 40px;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .vendor-left {
     display: flex;
     align-items: center;
@@ -166,14 +199,6 @@
 
 .vendor-tabs a:hover {
     text-decoration: underline;
-}
-
-/* Reviews Section */
-.reviews-section {
-    width: 100%;
-    background-color: #d9d9d9;
-    padding: 22px 18px;
-    margin-top: 22px;
 }
 
 .reviews-section h2 {
