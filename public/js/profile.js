@@ -288,3 +288,64 @@ async function deleteAddress(id) {
     }
 
 }
+
+async function loadVendorProfile() {
+
+    const res = await fetch("/auth/vendor-profile");
+    const data = await res.json();
+
+    if (!data.success) return;
+
+    document.getElementById("storeName").value =
+        data.vendor.store_name || "";
+
+    document.getElementById("businessRegNo").value =
+        data.vendor.business_registration_no || "";
+
+    document.getElementById("storeAddress").value =
+        data.vendor.address || "";
+
+    document.getElementById("storeDescription").value =
+        data.vendor.description || "";
+}
+
+document.addEventListener("click", async (e) => {
+
+    const btn = e.target.closest("#saveStoreBtn");
+
+    if (!btn) return;
+
+    const storeName = document.getElementById("storeName")?.value;
+    const businessRegNo = document.getElementById("businessRegNo")?.value;
+    const address = document.getElementById("storeAddress")?.value;
+    const description = document.getElementById("storeDescription")?.value;
+
+    if (!storeName || !businessRegNo || !address) {
+        alert("Please fill in required fields");
+        return;
+    }
+
+    try {
+
+        const res = await fetch("/auth/vendor-profile", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                storeName,
+                businessRegNo,
+                address,
+                description
+            })
+        });
+
+        const data = await res.json();
+
+        alert(data.message);
+
+    } catch (err) {
+        console.error(err);
+        alert("Failed to save store info");
+    }
+});

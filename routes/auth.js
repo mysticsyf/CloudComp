@@ -396,4 +396,157 @@ router.delete("/addresses/:id", async (req, res) => {
     res.json({ success: true });
 });
 
+router.get("/vendor-profile", async (req, res) => {
+
+    if (!req.session.user) {
+
+        return res.json({
+            success:false
+        });
+
+    }
+
+    const [rows] = await req.db.query(
+
+        "SELECT * FROM vendor_profiles WHERE user_id=?",
+
+        [req.session.user.id]
+
+    );
+
+    if(rows.length===0){
+
+        return res.json({
+            success:true,
+            vendor:{}
+        });
+
+    }
+
+    res.json({
+
+        success:true,
+        vendor:rows[0]
+
+    });
+
+});
+
+router.put("/vendor-profile", async (req,res)=>{
+
+    if(!req.session.user){
+
+        return res.json({
+            success:false,
+            message:"Not logged in."
+        });
+
+    }
+
+    const {
+
+        storeName,
+        businessRegNo,
+        address,
+        description
+
+    } = req.body;
+
+    const userId = req.session.user.id;
+
+    // Check if another vendor already uses this registration number
+    const [duplicate] = await req.db.query(
+
+        `SELECT id
+         FROM vendor_profiles
+         WHERE business_registration_no=?
+         AND user_id<>?`,
+
+        [
+            businessRegNo,
+            userId
+        ]
+
+    );
+
+    if(duplicate.length){
+
+        return res.json({
+
+            success:false,
+            message:"Business Registration Number already exists."
+
+        });
+
+    }
+
+    const [existing] = await req.db.query(
+
+        "SELECT id FROM vendor_profiles WHERE user_id=?",
+
+        [userId]
+
+    );
+
+    if(existing.length){
+
+        await req.db.query(
+
+            `UPDATE vendor_profiles
+             SET
+                store_name=?,
+                business_registration_no=?,
+                address=?,
+                description=?
+             WHERE user_id=?`,
+
+            [
+
+                storeName,
+                businessRegNo,
+                address,
+                description,
+                userId
+
+            ]
+
+        );
+
+    }else{
+
+        await req.db.query(
+
+            `INSERT INTO vendor_profiles
+            (
+                user_id,
+                store_name,
+                business_registration_no,
+                address,
+                description
+            )
+            VALUES(?,?,?,?,?)`,
+
+            [
+
+                userId,
+                storeName,
+                businessRegNo,
+                address,
+                description
+
+            ]
+
+        );
+
+    }
+
+    res.json({
+
+        success:true,
+        message:"Store information saved successfully."
+
+    });
+
+});
+
 module.exports = router;

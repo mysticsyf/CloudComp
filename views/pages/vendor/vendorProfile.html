@@ -111,29 +111,58 @@
 
                         <div class="card-header">
                             <h2>Store Information</h2>
+                            <p>Manage your business information displayed to customers.</p>
                         </div>
 
                         <div class="form-grid">
 
                             <div class="form-group">
-                                <label>Store Name</label>
-                                <input type="text">
+                                <label for="storeName">Store Name</label>
+                                <input
+                                    type="text"
+                                    id="storeName"
+                                    placeholder="Enter your store name"
+                                >
                             </div>
 
                             <div class="form-group">
-                                <label>Business Registration No.</label>
-                                <input type="text">
+                                <label for="businessRegNo">Business Registration No.</label>
+                                <input
+                                    type="text"
+                                    id="businessRegNo"
+                                    placeholder="e.g. 202501234567"
+                                >
                             </div>
 
                             <div class="form-group full-width">
-                                <label>Store Description</label>
-                                <textarea rows="4"></textarea>
+                                <label for="storeAddress">Business Address</label>
+                                <textarea
+                                    id="storeAddress"
+                                    rows="3"
+                                    placeholder="Enter your business address"
+                                ></textarea>
                             </div>
 
-                        </div>
+                            <div class="form-group full-width">
+                                <label for="storeDescription">Store Description</label>
+                                <textarea
+                                    id="storeDescription"
+                                    rows="5"
+                                    maxlength="500"
+                                    placeholder="Briefly introduce your business and the products or services you offer."
+                                ></textarea>
 
+                                <small class="text-muted">
+                                    Maximum 500 characters
+                                </small>
+                            </div>
+                        </div>
                         <div class="card-actions">
-                            <button class="btn-primary">Save Store Information</button>
+                            <button
+                                class="btn-primary"
+                                id="saveStoreBtn">
+                                Save Store Information
+                            </button>
                         </div>
 
                     </section>
