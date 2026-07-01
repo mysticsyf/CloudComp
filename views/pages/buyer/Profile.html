@@ -25,7 +25,7 @@
 
                         <div class="profile-avatar">
                             <img src="/images/default-avatar.png" alt="Profile Picture" id="profileImage">
-                            <button class="btn-secondary">Change Photo</button>
+                            <button class="btn-secondary" id="changePhotoBtn">Change Photo</button>
                         </div>
 
                         <div class="profile-summary">
@@ -68,7 +68,7 @@
                         </div>
 
                         <div class="card-actions">
-                            <button class="btn-primary">Save Changes</button>
+                            <button class="btn-primary" id="saveProfileBtn">Save Changes</button>
                         </div>
 
                     </section>
@@ -84,23 +84,23 @@
 
                             <div class="form-group">
                                 <label>Current Password</label>
-                                <input type="password">
+                                <input type="password" id="currentPassword">
                             </div>
 
                             <div class="form-group">
                                 <label>New Password</label>
-                                <input type="password">
+                                <input type="password" id="newPassword">
                             </div>
 
                             <div class="form-group">
                                 <label>Confirm New Password</label>
-                                <input type="password">
+                                <input type="password" id="confirmPassword">
                             </div>
 
                         </div>
 
                         <div class="card-actions">
-                            <button class="btn-primary">Change Password</button>
+                            <button class="btn-primary" id="changePasswordBtn">Change Password</button>
                         </div>
 
                     </section>
@@ -159,6 +159,20 @@
 
                     </section>
 
+                    <div class="modal" id="avatarModal">
+                        <div class="modal-content">
+                            <h2>Change Profile Picture</h2>
+                            <input
+                                type="file"
+                                id="avatarInput"
+                                accept="image/*"
+                            >
+                            <div class="modal-buttons">
+                                <button id="uploadAvatarBtn" class="btn-primary">Upload</button>
+                                <button id="cancelAvatarBtn" class="btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>

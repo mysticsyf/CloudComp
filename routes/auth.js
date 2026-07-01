@@ -69,7 +69,10 @@ router.post("/register", async (req, res) => {
             id: user.id,
             name: user.name,
             username: user.username,
-            role: user.role
+            email: user.email,
+            role: user.role,
+            avatar: user.avatar || null,
+            created_at: user.created_at
         };
 
         return res.json({
@@ -79,7 +82,10 @@ router.post("/register", async (req, res) => {
                 id: user.id,
                 name: user.name,
                 username: user.username,
-                role: user.role
+                email: user.email,
+                role: user.role,
+                avatar: user.avatar || null,
+                created_at: user.created_at
             }
         });
 
@@ -145,9 +151,11 @@ router.post("/login", async (req, res) => {
             id: user.id,
             name: user.name,
             username: user.username,
-            role: user.role
+            email: user.email,
+            role: user.role,
+            avatar: user.avatar || null,
+            created_at: user.created_at
         };
-
         // =========================
         // 4. Success
         // =========================
@@ -158,7 +166,10 @@ router.post("/login", async (req, res) => {
                 id: user.id,
                 name: user.name,
                 username: user.username,
-                role: user.role
+                email: user.email,
+                role: user.role,
+                avatar: user.avatar || null,
+                created_at: user.created_at
             }
         });
 
@@ -188,6 +199,46 @@ router.get("/current", (req, res) => {
         loggedIn: true,
         user: req.session.user
     });
+});
+
+const upload=require("../config/multer");
+
+router.post(
+"/upload-avatar",
+upload.single("avatar"),
+async(req,res)=>{
+
+    if(!req.session.user){
+
+        return res.json({
+            success:false,
+            message:"Please login."
+        });
+
+    }
+
+    const avatar="/uploads/avatars/"+req.file.filename;
+
+    await req.db.query(
+
+        "UPDATE users SET avatar=? WHERE id=?",
+
+        [
+            avatar,
+            req.session.user.id
+        ]
+
+    );
+
+    req.session.user.avatar=avatar;
+
+    res.json({
+
+        success:true,
+        avatar
+
+    });
+
 });
 
 module.exports = router;
