@@ -4,46 +4,48 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Orders | Vendor</title>
-    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/main.css" />
     <link rel="stylesheet" href="/css/vendor.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
     <div class="layout">
         <div data-component="sidebarVendor"></div>
-        <main class="main">
-            <div data-component="topbar"></div>
-            <section class="content">
-                <div class="myproducts-content">                
-                    <div class="myproducts-header">
-                        <h2 class="page-title">Orders</h2>
-                    </div>
-                    <div class="myproducts-controls">
-                        <div class="myproducts-search-wrap">
-                            <label class="search-label">Search</label>
-                            <div class="myproducts-search-box">
-                                <input type="text" id="orderSearchInput" placeholder="Search Order ID/Customer Name" />
-                                <i class="bi bi-search"></i>
+        <div class="right-side">
+            <main class="main">
+                <div data-component="topbar"></div>
+                <section class="content">
+                    <div class="myproducts-content">                
+                        <div class="myproducts-header">
+                            <h2 class="page-title">Orders</h2>
+                        </div>
+                        <div class="myproducts-controls">
+                            <div class="myproducts-search-wrap">
+                                <label class="search-label">Search</label>
+                                <div class="myproducts-search-box">
+                                    <input type="text" id="orderSearchInput" placeholder="Search Order ID/Customer Name" />
+                                    <i class="bi bi-search"></i>
+                                </div>
+                            </div>
+                            <div class="myproducts-filter-wrap">
+                                <select id="orderFilterSelect" class="filter-dropdown">
+                                    <option value="">FILTER</option>
+                                    <option value="shipping">Shipping</option>
+                                    <option value="picked up">Picked Up</option>
+                                    <option value="in transit">In Transit</option>
+                                    <option value="delivering">Delivering</option>
+                                    <option value="delivered">Delivered</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="myproducts-filter-wrap">
-                            <select id="orderFilterSelect" class="filter-dropdown">
-                                <option value="">FILTER</option>
-                                <option value="shipping">Shipping</option>
-                                <option value="picked up">Picked Up</option>
-                                <option value="in transit">In Transit</option>
-                                <option value="delivering">Delivering</option>
-                                <option value="delivered">Delivered</option>
-                            </select>
+                        <div class="orders-list-container">
+                            <div id="ordersList" class="orders-list">
+                            </div>
                         </div>
                     </div>
-                    <div class="orders-list-container">
-                        <div id="ordersList" class="orders-list">
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
+                </section>
+            </main>
+        </div>
     </div>
     <script src="/js/orders.js"></script>
     <script src="/js/component.js"></script>

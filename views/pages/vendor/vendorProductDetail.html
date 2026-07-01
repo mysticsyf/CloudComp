@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Detail | Vendor</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/vendor.css" />
+    <link rel="stylesheet" href="/css/vendorProductDetail.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="layout">
+        <div data-component="sidebarVendor"></div>
+        <div class="right-side">
+            <main class="main">
+                <div data-component="topbar"></div>
+                <section class="content">
+                    <div class="product-detail-content">
+
+                        <!-- Back link -->
+                        <a href="/products" class="back-link">
+                            <i class="bi bi-arrow-left"></i> Back to My Products
+                        </a>
+
+                        <!-- Loading / Error state -->
+                        <div id="detailError" class="detail-error" style="display:none;"></div>
+                        <div id="detailLoading" class="detail-loading">Loading product...</div>
+
+                        <!-- ===================== PRODUCT HERO ===================== -->
+                        <div id="productHero" class="product-hero" style="display:none;">
+
+                            <!-- Left: image gallery -->
+                            <div class="hero-gallery">
+                                <img id="mainImage" class="main-image" src="" alt="Product image" />
+                                <!-- Thumbnail strip — JS will populate this -->
+                                <div id="thumbStrip" class="thumb-strip"></div>
+                            </div>
+
+                            <!-- Right: product info -->
+                            <div class="hero-info">
+                                <span id="productCategory" class="product-category-badge"></span>
+                                <h1 id="productName" class="hero-title"></h1>
+
+                                <div class="hero-rating-row">
+                                    <span id="productRating" class="hero-rating-stars"></span>
+                                    <span id="productReviewCount" class="hero-review-count"></span>
+                                    <span class="hero-divider">|</span>
+                                    <span id="productSold" class="hero-sold"></span>
+                                </div>
+
+                                <div class="hero-price-box">
+                                    <span id="productPrice" class="hero-price"></span>
+                                </div>
+
+                                <div class="hero-stock-row">
+                                    <span class="hero-stock-label">Stock</span>
+                                    <span id="productStock" class="hero-stock-value"></span>
+                                </div>
+
+                                <div class="hero-description-box">
+                                    <p class="hero-desc-label">Description</p>
+                                    <p id="productDescription" class="hero-desc-text"></p>
+                                </div>
+
+                                <!-- Vendor-only action buttons -->
+                                <div class="hero-actions">
+                                    <button class="btn-hero-edit" id="heroEditBtn">
+                                        <i class="bi bi-pencil-square"></i> Edit Product
+                                    </button>
+                                    <button class="btn-hero-delete" id="heroDeleteBtn">
+                                        <i class="bi bi-trash3"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ===================== REVIEWS SECTION ===================== -->
+                        <div id="reviewsSection" class="reviews-panel" style="display:none;">
+                            <div class="reviews-header">
+                                <h2 class="reviews-title">Customer Reviews</h2>
+                                <div class="reviews-summary">
+                                    <span id="avgRating" class="reviews-avg-score"></span>
+                                    <div>
+                                        <div id="avgStars" class="reviews-avg-stars"></div>
+                                        <span id="totalReviews" class="reviews-total-count"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Rating breakdown bars -->
+                            <div id="ratingBreakdown" class="rating-breakdown"></div>
+
+                            <!-- Review cards list -->
+                            <div id="reviewsList" class="reviews-list"></div>
+
+                            <p id="noReviews" class="no-reviews-msg" style="display:none;">
+                                No reviews yet for this product.
+                            </p>
+                        </div>
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="/js/vendorProductDetail.js"></script>
+    <script src="/js/component.js"></script>
+</body>
+
+</html>

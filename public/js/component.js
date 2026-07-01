@@ -4,39 +4,46 @@ document.addEventListener("DOMContentLoaded", async () => {
   for (const el of components) {
     const name = el.getAttribute("data-component");
 
-    const res = await fetch(`/layout/${name}.html`);
-    const html = await res.text();
+    try {
+      const res = await fetch(`/layout/${name}.html`);
+      if (!res.ok) continue;
 
-    el.innerHTML = html;
+      const html = await res.text();
+      el.innerHTML = html;
 
-    if (name === "sidebar") {
-      highlightSidebar();
-      setupSidebarToggle(); // move toggle here (IMPORTANT)
+      if (name === "sidebar" || name === "sidebarVendor") {
+        highlightSidebar();
+        setupSidebarToggle();
+      }
+    } catch (err) {
+      console.error(`Failed to load component ${name}:`, err);
     }
   }
 
-  loadUserProfile(); // run AFTER everything loads
+  loadUserProfile();
+  initializeProfileBox();
+  initializeLogout();
 });
 
 // Highlight the active sidebar menu item based on the current URL
 function highlightSidebar() {
-  const currentPath = window.location.pathname; 
-  const currentUrl = window.location.href;     
-
-  const menuItems = document.querySelectorAll(".sidebar .menu-item, [data-component='sidebar'] .menu-item");
+  const currentPath = window.location.pathname;
+  const menuItems = document.querySelectorAll(".menu-item");
 
   menuItems.forEach(item => {
     item.classList.remove("active");
 
     const href = item.getAttribute("href");
+    if (!href) return;
 
+    if (href === "/") {
+      if (currentPath === "/") item.classList.add("active");
+      return;
+    }
 
-    if (
-      currentPath === href || 
-      (href !== "#" && currentPath.includes(href)) || 
-      item.href === currentUrl
-    ) {
-      item.classList.add("active"); 
+    // match prefix safely
+    if (currentPath.startsWith(href) && href !== "/") {
+      item.classList.add("active");
     }
   });
 }
@@ -60,21 +67,101 @@ function setupSidebarToggle() {
   });
 }
 
-// Load user profile information from localStorage
-const user = JSON.parse(localStorage.getItem("user"));
+//load user profile
+async function loadUserProfile() {
+  try {
+    const res = await fetch("/auth/current");
+    const data = await res.json();
 
-const profileName = document.getElementById("profileName");
-const profileRole = document.getElementById("profile-role");
-const profileImg = document.getElementById("profileImg");
+    const profileName = document.getElementById("profileName");
+    const profileRole = document.getElementById("profile-role");
+    const profileImg = document.getElementById("profileImg");
 
-if (user) {
-  // logged in user
-  profileName.textContent = user.name;
-  profileRole.textContent = user.role || "User";
-  profileImg.src = user.avatar || "/images/default-avatar.png";
-} else {
-  // NOT logged in → show guest only
-  profileName.textContent = "Guest";
-  profileRole.textContent = ""; // hide role
-  profileImg.src = "/images/default-avatar.png";
+    if (!data.loggedIn) {
+      profileName.textContent = "Guest";
+      profileRole.textContent = "";
+      profileImg.src = "/images/default-avatar.png";
+      return;
+    }
+
+    const user = data.user;
+
+    profileName.textContent = user.username;
+    profileRole.textContent = user.role || "User";
+    profileImg.src = user.avatar || "/images/default-avatar.png";
+
+  } catch (err) {
+    console.error("Error loading session user:", err);
+  }
+}
+
+//ProfileBox
+function initializeProfileBox() {
+  if (document.body.dataset.profileBoxBound === "true") return;
+  document.body.dataset.profileBoxBound = "true";
+
+  document.addEventListener("click", async (event) => {
+    const profileBox = event.target.closest("#profileBox");
+    if (!profileBox) return;
+
+    event.preventDefault();
+
+    try {
+      const res = await fetch("/auth/current");
+      const data = await res.json();
+
+      if (data.loggedIn) {
+        window.location.href = "/profile";
+      } else {
+        window.location.href = "/login";
+      }
+    } catch (err) {
+      console.error("Session check failed:", err);
+      window.location.href = "/login";
+    }
+  });
+}
+
+//Logout
+function initializeLogout() {
+  if (document.body.dataset.logoutBound === "true") return;
+  document.body.dataset.logoutBound = "true";
+
+  document.addEventListener("click", async (event) => {
+    const logoutBtn = event.target.closest("#logoutBtn");
+    if (!logoutBtn) return;
+
+    event.preventDefault();
+
+    try {
+      const res = await fetch("/auth/logout");
+
+      if (res.ok) {
+        window.location.href = "/";
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  });
+}
+
+// Apply role-based permissions to sidebar items
+function applySidebarPermissions() {
+  const role = window.currentUserRole;
+
+  if (!role) return;
+
+  // hide vendor-only items for buyers
+  if (role === "buyer") {
+    document.querySelectorAll(".vendor-only")
+      .forEach(el => el.style.display = "none");
+  }
+
+  // hide buyer-only items for vendors
+  if (role === "vendor") {
+    document.querySelectorAll(".buyer-only")
+      .forEach(el => el.style.display = "none");
+  }
 }

@@ -1,0 +1,262 @@
+/* ============================================================
+   Sales Statistics Page
+   Uses existing .card, .card-title, .summary-cards, .card-value
+   from vendor.css — only adds what's new here
+   ============================================================ */
+
+.stats-content {
+    padding: 2rem;
+    background: #f4f7f6;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+}
+
+/* ── Page Header ─────────────────────────────────────────── */
+.stats-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.stats-page-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-dark, #1a1f36);
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+.stats-page-sub {
+    font-size: 0.83rem;
+    color: #8792a2;
+    margin: 4px 0 0 0;
+}
+
+/* ── Range Filter Tabs ───────────────────────────────────── */
+.range-tabs {
+    display: flex;
+    gap: 0.5rem;
+    background: #fff;
+    border: 1px solid var(--border, #e3e8ee);
+    border-radius: 12px;
+    padding: 4px;
+}
+
+.range-btn {
+    height: 34px;
+    padding: 0 16px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 600;
+    color: #8792a2;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.range-btn:hover {
+    background: #f4f7f6;
+    color: var(--text-dark, #1a1f36);
+}
+
+.range-btn.active {
+    background: var(--brand-orange, #f25a1d);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(242, 90, 29, 0.3);
+}
+
+/* ── KPI Cards ───────────────────────────────────────────── */
+.summary-card {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.kpi-icon-wrap {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.kpi-green  { background: #ecfdf5; color: #10b981; }
+.kpi-blue   { background: #eff6ff; color: #3b82f6; }
+.kpi-orange { background: #fff3ed; color: var(--brand-orange, #f25a1d); }
+.kpi-yellow { background: #fefce8; color: #f59e0b; }
+
+.kpi-change {
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.kpi-change.up   { color: #10b981; }
+.kpi-change.down { color: #ef4444; }
+
+/* ── Charts Row ──────────────────────────────────────────── */
+.charts-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+}
+
+.chart-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.chart-wrapper-tall {
+    height: 280px;
+    width: 100%;
+}
+
+.chart-wrapper-sq {
+    height: 220px;
+    width: 100%;
+}
+
+/* Doughnut legend */
+.doughnut-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 1rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: #4d5562;
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.legend-pct {
+    margin-left: auto;
+    font-weight: 700;
+    color: var(--text-dark, #1a1f36);
+}
+
+/* ── Product Breakdown Table ─────────────────────────────── */
+.stats-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stats-table th,
+.stats-table td {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid #e3e8ee;
+    text-align: left;
+}
+
+.stats-table th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: #8792a2;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+}
+
+.stats-table td {
+    font-size: 0.88rem;
+    color: #3c4257;
+}
+
+.stats-table tbody tr:hover td {
+    background: #f8fafc;
+}
+
+.stats-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Revenue share bar inside table */
+.share-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 120px;
+}
+
+.share-bar-bg {
+    flex: 1;
+    height: 6px;
+    background: #e3e8ee;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.share-bar-fill {
+    height: 100%;
+    background: var(--brand-orange, #f25a1d);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+.share-pct {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #8792a2;
+    min-width: 36px;
+}
+
+/* Rating stars */
+.rating-stars-sm {
+    color: #f59e0b;
+    font-size: 0.8rem;
+}
+
+.table-empty {
+    text-align: center;
+    color: #9ca3af;
+    padding: 2rem !important;
+}
+
+/* Rank badge */
+.rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: #f4f7f6;
+    color: #8792a2;
+}
+
+.rank-badge.gold   { background: #fef9c3; color: #b45309; }
+.rank-badge.silver { background: #f3f4f6; color: #6b7280; }
+.rank-badge.bronze { background: #fef3c7; color: #92400e; }
+
+/* Responsive */
+@media (max-width: 900px) {
+    .charts-row {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
