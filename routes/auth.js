@@ -72,7 +72,8 @@ router.post("/register", async (req, res) => {
             email: user.email,
             role: user.role,
             avatar: user.avatar || null,
-            created_at: user.created_at
+            created_at: user.created_at,
+            phone: user.phone || null
         };
 
         return res.json({
@@ -85,7 +86,8 @@ router.post("/register", async (req, res) => {
                 email: user.email,
                 role: user.role,
                 avatar: user.avatar || null,
-                created_at: user.created_at
+                created_at: user.created_at,
+                phone: user.phone || null
             }
         });
 
@@ -154,7 +156,8 @@ router.post("/login", async (req, res) => {
             email: user.email,
             role: user.role,
             avatar: user.avatar || null,
-            created_at: user.created_at
+            created_at: user.created_at,
+            phone: user.phone || null
         };
         // =========================
         // 4. Success
@@ -169,7 +172,8 @@ router.post("/login", async (req, res) => {
                 email: user.email,
                 role: user.role,
                 avatar: user.avatar || null,
-                created_at: user.created_at
+                created_at: user.created_at,
+                phone: user.phone || null
             }
         });
 
@@ -239,6 +243,62 @@ async(req,res)=>{
 
     });
 
+});
+
+router.put("/profile", async (req, res) => {
+
+    if (!req.session.user) {
+        return res.json({
+            success: false,
+            message: "Not logged in"
+        });
+    }
+
+    const { username, email, phone } = req.body;
+    const userId = req.session.user.id;
+
+    try {
+         const [existing] = await req.db.query(
+            `SELECT id FROM users 
+             WHERE (username = ? OR email = ?) 
+             AND id != ?`,
+            [username, email, userId]
+        );
+
+        if (existing.length > 0) {
+            return res.json({
+                success: false,
+                message: "Username or Email already exists"
+            });
+        }
+
+        await req.db.query(
+            `UPDATE users 
+             SET username=?, email=?, phone=? 
+             WHERE id=?`,
+            [
+                username,
+                email,
+                phone,
+                req.session.user.id
+            ]
+        );
+
+        // update session too
+        req.session.user.username = username;
+        req.session.user.email = email;
+        req.session.user.phone = phone;
+
+        res.json({ success: true });
+
+    } catch (err) {
+        console.error(err);
+
+        res.json({
+            success: false,
+            message: "Database error"
+        });
+    }
 });
 
 module.exports = router;

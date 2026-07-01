@@ -108,3 +108,56 @@ async function uploadAvatar(){
     }
 
 }
+
+document
+.getElementById("saveChangesBtn")
+.addEventListener("click", saveProfile);
+
+async function saveProfile() {
+    const usernameVal = document.getElementById("username").value.trim();
+    const emailVal = document.getElementById("email").value.trim();
+    const phoneVal = document.getElementById("phone").value.trim();
+
+
+    if (!usernameVal) {
+        alert("Username cannot be empty");
+        return;
+    }
+
+    if (!emailVal) {
+        alert("Email cannot be empty");
+        return;
+    }
+
+    const body = {
+        username: usernameVal,
+        email: emailVal,
+        phone: phoneVal || null
+    };
+
+    try {
+
+        const res = await fetch("/auth/profile", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            alert("Profile updated!");
+
+            // refresh UI
+            loadProfile();
+        } else {
+            alert(data.message);
+        }
+
+    } catch (err) {
+        console.error(err);
+        alert("Update failed");
+    }
+}
