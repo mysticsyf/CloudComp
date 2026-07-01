@@ -1,0 +1,140 @@
+.buyer-payment-main {
+    width: 100%;
+    max-width: none;
+    padding: 80px 0 0 0;
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+.buyer-payment-page {
+    width: 100%;
+    min-height: calc(100vh - 80px);
+    padding: 25px 40px;
+    background-color: #f4f4f4;
+}
+
+.buyer-page-title h1 {
+    display: inline-block;
+    background-color: #d9d9d9;
+    padding: 8px 14px;
+    font-size: 26px;
+    font-weight: 400;
+    margin-bottom: 25px;
+}
+
+.payment-order-card {
+    width: 100%;
+    background-color: #d9d9d9;
+    margin-bottom: 22px;
+    padding: 18px 22px;
+}
+
+.payment-order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.status {
+    padding: 6px 12px;
+    font-size: 15px;
+}
+
+.pending {
+    background-color: #ffd9a3;
+}
+
+.paid {
+    background-color: #bde5bd;
+}
+
+.payment-order-body {
+    display: grid;
+    grid-template-columns: 110px 1fr 140px;
+    gap: 25px;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 15px;
+}
+
+.payment-product-img {
+    width: 100px;
+    height: 90px;
+    background-color: #eeeeee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+}
+
+.payment-product-info h2 {
+    font-size: 25px;
+    font-weight: 400;
+    margin-bottom: 8px;
+}
+
+.payment-product-info p {
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.payment-price {
+    text-align: right;
+    font-size: 24px;
+}
+
+.payment-order-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 22px;
+    margin-top: 15px;
+}
+
+.pay-now-btn,
+.track-btn {
+    min-width: 160px;
+    height: 45px;
+    background-color: #ff7518;
+    color: #000;
+    text-decoration: none;
+    border: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.track-btn {
+    background-color: #d9d9d9;
+}
+
+.pay-now-btn:hover {
+    background-color: #f06400;
+}
+
+.track-btn:hover {
+    background-color: #c7c7c7;
+}
+
+@media (max-width: 700px) {
+    .payment-order-body {
+        grid-template-columns: 1fr;
+    }
+
+    .payment-price {
+        text-align: left;
+    }
+
+    .payment-order-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+}
