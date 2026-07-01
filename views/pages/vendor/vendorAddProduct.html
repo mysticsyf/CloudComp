@@ -5,78 +5,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add Product | Vendor</title>
     <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/vendor.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
     <div class="layout">
         <div data-component="sidebarVendor"></div>
-        <main class="main">
-            <!-- Topbar -->
-            <div data-component="topbar"></div>
-            <section class="content">
-                <div class="add-product-content">
+        <div class="right-side">
+            <main class="main">
+                <div data-component="topbar"></div>
+                <section class="content">
+                    <div class="add-product-content">
 
-                    <div class="page-header">
-                        <div class="header-left">
-                            <a href="/products" class="back-link"><i class="bi bi-arrow-left"></i> Back to My Products</a>
-                            <h2 class="page-title">ADD A NEW PRODUCT</h2>
+                        <div class="page-header">
+                            <div class="header-left">
+                                <a href="/products" class="back-link"><i class="bi bi-arrow-left"></i> Back to My Products</a>
+                                <h2 class="page-title">ADD A NEW PRODUCT</h2>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card form-card">
-                        <form id="addProductForm">
-                            
-                            <div class="form-grid">
-                                <div class="form-column">
-                                    <div class="form-group">
-                                        <label>Product Name <span class="required">*</span></label>
-                                        <input type="text" id="productName" placeholder="e.g. Premium Brake Pads" required />
+                        <div class="card form-card">
+                            <form id="addProductForm">
+                                
+                                <div class="form-grid">
+                                    <div class="form-column">
+                                        <div class="form-group">
+                                            <label>Product Name <span class="required">*</span></label>
+                                            <input type="text" id="productName" placeholder="e.g. Premium Brake Pads" required />
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label>Price ($) <span class="required">*</span></label>
+                                                <input type="number" id="productPrice" step="0.01" min="0" placeholder="0.00" required />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Stock Quantity <span class="required">*</span></label>
+                                                <input type="number" id="productStock" min="0" placeholder="0" required />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Description</label>
+                                            <textarea id="productDescription" rows="5" placeholder="Enter product details and specifications..."></textarea>
+                                        </div>
                                     </div>
 
-                                    <div class="form-row">
+                                    <!-- Right Column (Image Upload) -->
+                                    <div class="form-column">
                                         <div class="form-group">
-                                            <label>Price ($) <span class="required">*</span></label>
-                                            <input type="number" id="productPrice" step="0.01" min="0" placeholder="0.00" required />
+                                            <label>Product Image</label>
+                                            <input type="file" id="productImage" accept="image/*" />
                                         </div>
-                                        <div class="form-group">
-                                            <label>Stock Quantity <span class="required">*</span></label>
-                                            <input type="number" id="productStock" min="0" placeholder="0" required />
-                                        </div>
-                                    </div>
 
-                                    <div class="form-group">
-                                        <label>Description</label>
-                                        <textarea id="productDescription" rows="5" placeholder="Enter product details and specifications..."></textarea>
+                                        <!-- Image Preview Box -->
+                                        <div class="image-preview-container">
+                                            <div class="image-preview" id="imagePreview">
+                                                <i class="bi bi-image"></i>
+                                                <span>Image Preview</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- Right Column (Image Upload) -->
-                                <div class="form-column">
-                                    <div class="form-group">
-                                        <label>Product Image</label>
-                                        <input type="file" id="productImage" accept="image/*" />
-                                    </div>
-
-                                    <!-- Image Preview Box -->
-                                    <div class="image-preview-container">
-                                        <div class="image-preview" id="imagePreview">
-                                            <i class="bi bi-image"></i>
-                                            <span>Image Preview</span>
-                                        </div>
-                                    </div>
+                                <div class="form-actions">
+                                    <button type="button" class="btn-cancel" onclick="window.location.href='/products'">CANCEL</button>
+                                    <button type="submit" class="btn-save"><i class="bi bi-check2"></i> SAVE PRODUCT</button>
                                 </div>
-                            </div>
 
-                            <div class="form-actions">
-                                <button type="button" class="btn-cancel" onclick="window.location.href='/products'">CANCEL</button>
-                                <button type="submit" class="btn-save"><i class="bi bi-check2"></i> SAVE PRODUCT</button>
-                            </div>
+                            </form>
+                        </div>
 
-                        </form>
                     </div>
-
-                </div>
-            </section>
-        </main>
+                </section>
+            </main>
+        </div>
     </div>
 
     <script>
