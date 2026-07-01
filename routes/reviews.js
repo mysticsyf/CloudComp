@@ -56,4 +56,22 @@ router.get('/api/data/:vendorId', async (req, res) => {
     }
 });
 
+router.get('/api/reviews/:productId', async (req, res) => {
+    const { productId } = req.params;
+    try {
+        const [rows] = await req.db.query(
+            `SELECT r.*, u.username, u.avatar
+             FROM product_reviews r
+             JOIN users u ON u.id = r.user_id
+             WHERE r.product_id = ?
+             ORDER BY r.created_at DESC`,
+            [productId]
+        );
+        res.json(rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error.' });
+    }
+});
+
 module.exports = router;

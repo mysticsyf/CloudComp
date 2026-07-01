@@ -137,4 +137,71 @@ router.get('/api/vendor/products/:vendorId', async (req, res) => {
     res.status(500).json({ error: 'Failed to load products' });
   }
 });
+
+// GET /api/vendor/stats/:vendorId?range=7|30|90
+router.get('/api/vendor/stats/:vendorId', async (req, res) => {
+    const vendorId = req.params.vendorId;
+    const range    = parseInt(req.query.range) || 7;
+    const pool     = req.db;
+
+    try {
+        // 1. Summary KPIs
+        const [summaryRows] = await pool.query(
+            `SELECT
+                SUM(oi.price * oi.quantity)  AS totalRevenue,
+                COUNT(DISTINCT oi.order_id)  AS totalOrders,
+                AVG(pr.rating)               AS averageRating
+             FROM order_items oi
+             JOIN products p ON p.id = oi.product_id
+             LEFT JOIN orders o ON o.id = oi.order_id
+             LEFT JOIN product_reviews pr ON pr.product_id = p.id
+             WHERE p.vendor_id = ?
+               AND o.created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)`,
+            [vendorId, range]
+        );
+
+        // 2. Revenue by day (for line chart)
+        const [revenueByDay] = await pool.query(
+            `SELECT
+                DATE(o.created_at)               AS day,
+                SUM(oi.price * oi.quantity)      AS revenue
+             FROM order_items oi
+             JOIN orders o ON o.id = oi.order_id
+             JOIN products p ON p.id = oi.product_id
+             WHERE p.vendor_id = ?
+               AND o.created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+             GROUP BY DATE(o.created_at)
+             ORDER BY day ASC`,
+            [vendorId, range]
+        );
+
+        // 3. Per-product breakdown (for doughnut + table)
+        const [productSales] = await pool.query(
+            `SELECT
+                p.name,
+                SUM(oi.quantity)            AS units,
+                SUM(oi.price * oi.quantity) AS revenue,
+                AVG(pr.rating)              AS avg_rating
+             FROM order_items oi
+             JOIN products p ON p.id = oi.product_id
+             LEFT JOIN orders o ON o.id = oi.order_id
+             LEFT JOIN product_reviews pr ON pr.product_id = p.id
+             WHERE p.vendor_id = ?
+               AND o.created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+             GROUP BY p.id
+             ORDER BY revenue DESC`,
+            [vendorId, range]
+        );
+
+        res.json({
+            summary:      summaryRows[0],
+            revenueByDay: revenueByDay,
+            productSales: productSales
+        });
+
+    } catch (err) {
+        console.error('Stats API error:', err);
+        res.status(500).json({ error: 'Failed to load statistics.' });
+    }
+});
 module.exports = router;

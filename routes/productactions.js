@@ -138,4 +138,25 @@ router.get('/api/vendor/orders/:vendorId', async (req, res) => {
   }
 });
 
+router.get('/api/vendor/product/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const [rows] = await req.db.query(
+            `SELECT p.*,
+                    AVG(pr.rating)       AS rating,
+                    COUNT(pr.id)         AS review_count
+             FROM products p
+             LEFT JOIN product_reviews pr ON pr.product_id = p.id
+             WHERE p.id = ?
+             GROUP BY p.id`,
+            [id]
+        );
+        if (!rows.length) return res.status(404).json({ message: 'Product not found.' });
+        res.json(rows[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error.' });
+    }
+});
+
 module.exports = router;
