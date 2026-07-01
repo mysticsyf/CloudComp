@@ -34,6 +34,14 @@ app.use("/", require("./routes/dashboard"));
 app.use("/", require("./routes/productactions"));
 app.use("/reviews", require("./routes/reviews"));
 
+// Product detail page — must be BEFORE the 404 handler
+app.get('/vendor/product/:id', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views/pages/vendor/vendorProductDetail.html'));
+});
+
+app.get('/vendor/stats', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views/pages/vendor/vendorSalesStats.html'));
+});
 // =========================
 // 404
 // =========================
@@ -43,6 +51,8 @@ app.use((req, res) => {
     <a href="/">Back to Dashboard</a>
   `);
 });
+
+
 
 // =========================
 // START SERVER

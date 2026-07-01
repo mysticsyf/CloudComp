@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sales Statistics | Vendor</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/vendor.css" />
+    <link rel="stylesheet" href="/css/vendorSalesStats.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="layout">
+        <div data-component="sidebarVendor"></div>
+        <div class="right-side">
+            <main class="main">
+                <div data-component="topbar"></div>
+                <section class="content">
+                    <div class="stats-content">
+
+                        <!-- ── Page Header ── -->
+                        <div class="stats-page-header">
+                            <div>
+                                <h2 class="stats-page-title">SALES STATISTICS</h2>
+                                <p class="stats-page-sub">Track your revenue, orders and product performance</p>
+                            </div>
+
+                            <!-- Time range filter -->
+                            <div class="range-tabs" id="rangeTabs">
+                                <button class="range-btn active" data-range="7">Last 7 Days</button>
+                                <button class="range-btn" data-range="30">Last 30 Days</button>
+                                <button class="range-btn" data-range="90">Last 90 Days</button>
+                            </div>
+                        </div>
+
+                        <!-- ── KPI Summary Cards ── -->
+                        <div class="summary-cards">
+                            <div class="card summary-card">
+                                <div class="kpi-icon-wrap kpi-green">
+                                    <i class="bi bi-cash-stack"></i>
+                                </div>
+                                <div>
+                                    <div class="card-title">Total Revenue</div>
+                                    <div class="card-value" id="kpi-revenue">RM 0.00</div>
+                                    <div class="kpi-change" id="kpi-revenue-change"></div>
+                                </div>
+                            </div>
+
+                            <div class="card summary-card">
+                                <div class="kpi-icon-wrap kpi-blue">
+                                    <i class="bi bi-bag-check"></i>
+                                </div>
+                                <div>
+                                    <div class="card-title">Total Orders</div>
+                                    <div class="card-value" id="kpi-orders">0</div>
+                                    <div class="kpi-change" id="kpi-orders-change"></div>
+                                </div>
+                            </div>
+
+                            <div class="card summary-card">
+                                <div class="kpi-icon-wrap kpi-orange">
+                                    <i class="bi bi-receipt"></i>
+                                </div>
+                                <div>
+                                    <div class="card-title">Avg Order Value</div>
+                                    <div class="card-value" id="kpi-aov">RM 0.00</div>
+                                    <div class="kpi-change" id="kpi-aov-change"></div>
+                                </div>
+                            </div>
+
+                            <div class="card summary-card">
+                                <div class="kpi-icon-wrap kpi-yellow">
+                                    <i class="bi bi-star-fill"></i>
+                                </div>
+                                <div>
+                                    <div class="card-title">Avg Rating</div>
+                                    <div class="card-value" id="kpi-rating">0.0 <span class="star">★</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ── Charts Row ── -->
+                        <div class="charts-row">
+                            <!-- Line Chart: Revenue over time -->
+                            <div class="card chart-card chart-card-wide">
+                                <div class="chart-card-header">
+                                    <div class="card-title">Revenue Over Time</div>
+                                </div>
+                                <div class="chart-wrapper-tall">
+                                    <canvas id="revenueLineChart"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Doughnut Chart: Sales by product -->
+                            <div class="card chart-card">
+                                <div class="chart-card-header">
+                                    <div class="card-title">Sales by Product</div>
+                                </div>
+                                <div class="chart-wrapper-sq">
+                                    <canvas id="productDoughnutChart"></canvas>
+                                </div>
+                                <div id="doughnutLegend" class="doughnut-legend"></div>
+                            </div>
+                        </div>
+
+                        <!-- ── Product Breakdown Table ── -->
+                        <div class="card">
+                            <div class="chart-card-header">
+                                <div class="card-title">Product Performance Breakdown</div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="stats-table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Product</th>
+                                            <th>Units Sold</th>
+                                            <th>Revenue</th>
+                                            <th>Avg Rating</th>
+                                            <th>Revenue Share</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="productTableBody">
+                                        <tr>
+                                            <td colspan="6" class="table-empty">Loading...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/vendorSalesStats.js"></script>
+    <script src="/js/component.js"></script>
+</body>
+
+</html>
