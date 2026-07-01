@@ -301,4 +301,59 @@ router.put("/profile", async (req, res) => {
     }
 });
 
+router.post("/change-password", async (req, res) => {
+
+    if (!req.session.user) {
+        return res.json({
+            success: false,
+            message: "Not logged in"
+        });
+    }
+
+    const { currentPassword, newPassword } = req.body;
+    const userId = req.session.user.id;
+
+    try {
+
+        // get user password from DB
+        const [rows] = await req.db.query(
+            "SELECT password FROM users WHERE id=?",
+            [userId]
+        );
+
+        const user = rows[0];
+
+        // 🔐 hash current password and compare
+        const hashedCurrent = hashPassword(currentPassword);
+
+        if (hashedCurrent !== user.password) {
+            return res.json({
+                success: false,
+                message: "Current password is incorrect"
+            });
+        }
+
+        // 🔐 hash new password
+        const hashedNew = hashPassword(newPassword);
+
+        // update DB
+        await req.db.query(
+            "UPDATE users SET password=? WHERE id=?",
+            [hashedNew, userId]
+        );
+
+        res.json({
+            success: true,
+            message: "Password updated successfully"
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.json({
+            success: false,
+            message: "Server error"
+        });
+    }
+});
+
 module.exports = router;

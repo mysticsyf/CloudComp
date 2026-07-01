@@ -161,3 +161,62 @@ async function saveProfile() {
         alert("Update failed");
     }
 }
+
+document
+.getElementById("changePasswordBtn")
+.addEventListener("click", changePassword);
+
+async function changePassword() {
+
+    const current = document.getElementById("currentPassword").value;
+    const newPass = document.getElementById("newPassword").value;
+    const confirm = document.getElementById("confirmPassword").value;
+
+    // ❗ validation
+    if (!current || !newPass || !confirm) {
+        alert("All fields are required");
+        return;
+    }
+
+    if (newPass !== confirm) {
+        alert("New passwords do not match");
+        return;
+    }
+
+    if (newPass.length < 6) {
+        alert("Password must be at least 6 characters");
+        return;
+    }
+
+    try {
+
+        const res = await fetch("/auth/change-password", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                currentPassword: current,
+                newPassword: newPass
+            })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            alert("Password changed successfully");
+
+            // clear fields
+            currentPassword.value = "";
+            newPassword.value = "";
+            confirmPassword.value = "";
+
+        } else {
+            alert(data.message);
+        }
+
+    } catch (err) {
+        console.error(err);
+        alert("Error changing password");
+    }
+}
