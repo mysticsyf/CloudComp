@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vendor Dashboard - Tracking</title>
     <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/vendor.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 
@@ -18,7 +19,7 @@
 
             <section class="content">
                 <div class="dashboard-content">
-                    <div class="tracking-title">Tracking page - Seller</div>
+                    <div class="tracking-title">Tracking page</div>
 
                     <div class="progress-timeline" id="progress-timeline">
                         <div class="progress-step" data-status="To Ship"><div class="step-circle"></div><div class="step-label">To Ship</div></div>
@@ -32,13 +33,7 @@
 
                     <div class="log-container" id="log-list-box"></div>
 
-                    <div class="action-buttons">
-                        <button class="btn-track" id="btn-ToShip" onclick="updateStatus('To Ship', 'Seller ready to ship your parcel')">Update "To Ship"</button>
-                        <button class="btn-track" id="btn-PickedUp" onclick="updateStatus('Picked Up', 'Parcel picked up by Courier Service')">Update "Picked Up by CS"</button>
-                        <button class="btn-track" id="btn-InTransit" onclick="updateStatus('In Transit', 'Parcel is arrived to Transit Centre')">Update "In Transit"</button>
-                        <button class="btn-track" id="btn-Delivery" onclick="updateStatus('Delivery', 'Out for delivery')">Update "Delivery"</button>
-                        <button class="btn-track" id="btn-Delivered" onclick="updateStatus('Delivered', 'Package is received by customer')">Update "Delivered"</button>
-                    </div>
+                    <div class="action-buttons" id="action-buttons-box" style="display: none;"></div>
                 </div>
             </section>
         </main>
@@ -61,8 +56,7 @@
                 updateProgressCircles(data.currentStatus);
                 renderLogs(data.logs);
                 
-                // execute the logic to disable button until next step is reached
-                disableExceptNext(data.currentStatus);
+                await handleRoleButtons(data.currentStatus);
 
             } catch (err) {
                 console.error("Error loading tracking page:", err);
@@ -82,10 +76,61 @@
             });
         }
 
+        async function handleRoleButtons(currentStatus) {
+            const buttonsContainer = document.getElementById('action-buttons-box');
+            buttonsContainer.innerHTML = ''; 
+
+            let role = "buyer"; 
+            try {
+                const authRes = await fetch("/auth/current");
+                const authData = await authRes.json();
+                if (authData.loggedIn && authData.user && authData.user.role) {
+                    role = authData.user.role.toLowerCase();
+                }
+            } catch (err) {
+                console.error("Failed to fetch user role on buttons rendering:", err);
+            }
+
+            if (role === 'vendor') {
+                buttonsContainer.innerHTML = `
+                    <button class="btn-track" id="btn-ToShip" onclick="updateStatus('To Ship', 'Seller ready to ship your parcel')">Update "To Ship"</button>
+                    <button class="btn-track" id="btn-PickedUp" onclick="updateStatus('Picked Up', 'Parcel picked up by Courier Service')">Update "Picked Up by CS"</button>
+                    <button class="btn-track" id="btn-InTransit" onclick="updateStatus('In Transit', 'Parcel is arrived to Transit Centre')">Update "In Transit"</button>
+                    <button class="btn-track" id="btn-Delivery" onclick="updateStatus('Delivery', 'Out for delivery')">Update "Delivery"</button>
+                    <button class="btn-track" id="btn-Delivered" onclick="updateStatus('Delivered', 'Package is received by customer')">Update "Delivered"</button>
+                `;
+                disableExceptNext(currentStatus);
+
+            } else {
+                if (currentStatus === "Delivered") {
+                    try {
+                        const reviewRes = await fetch(`/reviews/api/order-item/${orderId}`);
+                        const reviewData = reviewRes.json ? await reviewRes.json() : {};
+
+                        if (reviewData.hasReviewed) {
+                            buttonsContainer.innerHTML = `
+                                <button class="btn-track" disabled style="background-color: #cbd5e0; color: #718096; cursor: not-allowed;">Already Reviewed</button>
+                            `;
+                        } else {
+                            buttonsContainer.innerHTML = `
+                                <button class="btn-track btn-rating" onclick="goToRatingPage()">Write a Review</button>
+                            `;
+                        }
+                    } catch (err) {
+                        console.error("Error checking review status:", err);
+                    }
+                } else {
+                    buttonsContainer.innerHTML = `
+                        <button class="btn-track" disabled style="background-color: #cbd5e0; color: #718096;">Waiting for Delivery...</button>
+                    `;
+                }
+            }
+
+            buttonsContainer.style.display = 'flex';
+        }
+
         function disableExceptNext(currentStatus) {
-            // follow the order of the tracking step
             const statuses = ["To Ship", "Picked Up", "In Transit", "Delivery", "Delivered"];
-            
             let currentIndex = statuses.indexOf(currentStatus);
             
             if (currentStatus === "Order Placed") {
@@ -109,6 +154,11 @@
                     }
                 }
             });
+        }
+
+        // write review with the order id
+        function goToRatingPage() {
+            window.location.href = `/reviews/write/${orderId}`; 
         }
 
         function renderLogs(logs) {

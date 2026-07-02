@@ -81,6 +81,8 @@
             const starsHtml = generateStars(review.rating);
             const avatarLetter = review.customer_name.charAt(0);
 
+            const formattedOrderId = `Order-ID-${String(review.order_id || '').padStart(2, '0')}`;
+
             card.innerHTML = `
             <div class="review-header">
                 <div class="reviewer-info">
@@ -94,7 +96,7 @@
             </div>
             <div class="review-text">${review.review_text}</div>
             <div class="review-product">
-                <i class="bi bi-box-seam"></i> Product ID [${review.product_id}]: <b>${review.item_name}</b>
+                <i class="bi bi-box-seam"></i> Order ID [${formattedOrderId}] | Product ID [${review.product_id}]: <b>${review.item_name}</b>
             </div>
             `;
             reviewsListContainer.appendChild(card);

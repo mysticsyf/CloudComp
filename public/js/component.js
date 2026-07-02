@@ -1,8 +1,27 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  let currentRole = "buyer"; 
+  try {
+    const authRes = await fetch("/auth/current");
+    const authData = await authRes.json();
+    if (authData.loggedIn && authData.user && authData.user.role) {
+      currentRole = authData.user.role.toLowerCase();
+    }
+  } catch (err) {
+    console.error("Failed to fetch current user role during initialization:", err);
+  }
+
   const components = document.querySelectorAll("[data-component]");
 
   for (const el of components) {
-    const name = el.getAttribute("data-component");
+    let name = el.getAttribute("data-component");
+
+    if (name === "sidebar" || name === "sidebarVendor") {
+      if (currentRole === "vendor") {
+        name = "sidebarVendor";
+      } else {
+        name = "sidebar";
+      }
+    }
 
     try {
       const res = await fetch(`/layout/${name}.html`);
@@ -77,9 +96,11 @@ async function loadUserProfile() {
     const profileRole = document.getElementById("profile-role");
     const profileImg = document.getElementById("profileImg");
 
+    if (!profileName || !profileImg) return; 
+
     if (!data.loggedIn) {
       profileName.textContent = "Guest";
-      profileRole.textContent = "";
+      if (profileRole) profileRole.textContent = "";
       profileImg.src = "/images/default-avatar.png";
       return;
     }
@@ -87,7 +108,7 @@ async function loadUserProfile() {
     const user = data.user;
 
     profileName.textContent = user.username;
-    profileRole.textContent = user.role || "User";
+    if (profileRole) profileRole.textContent = user.role || "User";
     profileImg.src = user.avatar || "/images/default-avatar.png";
 
   } catch (err) {

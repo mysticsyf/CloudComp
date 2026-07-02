@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Write a Review</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .review-box {
+            background: #fff;
+            border-radius: 16px;
+            padding: 40px;
+            border: 1px solid #e2e8f0;
+            max-width: 600px;
+            margin: 30px auto 0 auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .product-preview {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .star-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #4a5568;
+        }
+        .star-rating {
+            display: flex;
+            gap: 10px;
+            font-size: 2.5rem;
+            color: #cbd5e0;
+            margin-bottom: 25px;
+            cursor: pointer;
+        }
+        .star-rating i.active {
+            color: #ff9900;
+        }
+        .textarea-wrap label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #4a5568;
+        }
+        .review-textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: none;
+            outline: none;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+        .review-textarea:focus {
+            border-color: #0099ff;
+        }
+        .btn-submit-review {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: #ff9900;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: opacity 0.2s;
+        }
+        .btn-submit-review:hover { opacity: 0.9; }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <div data-component="sidebar"></div>
+        
+        <div class="right-side">
+            <main class="main">
+                <div data-component="topbar"></div>
+
+                <section class="content">
+                    <div class="myproducts-content">
+                        <div class="myproducts-header">
+                            <h2 class="page-title">Write a Review</h2>
+                        </div>
+
+                        <div class="review-box">
+                            <div class="product-preview" id="product-display">
+                                <i class="bi bi-arrow-repeat spin"></i> Loading product info...
+                            </div>
+
+                            <label class="star-label">Your Rating:</label>
+                            <div class="star-rating" id="star-box">
+                                <i class="bi bi-star" data-value="1"></i>
+                                <i class="bi bi-star" data-value="2"></i>
+                                <i class="bi bi-star" data-value="3"></i>
+                                <i class="bi bi-star" data-value="4"></i>
+                                <i class="bi bi-star" data-value="5"></i>
+                            </div>
+
+                            <div class="textarea-wrap">
+                                <label for="reviewText">Share your experience:</label>
+                                <textarea id="reviewText" class="review-textarea" placeholder="What did you like or dislike about this product?"></textarea>
+                            </div>
+
+                            <button class="btn-submit-review" onclick="submitReview()">Submit Review</button>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const pathSegments = window.location.pathname.split('/');
+        const orderId = pathSegments[pathSegments.length - 1] || 1;
+        
+        let selectedRating = 0;
+        let targetProductId = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadProductInfo();
+            initStarsEvent();
+        });
+
+        async function loadProductInfo() {
+            try {
+                const response = await fetch(`/reviews/api/order-item/${orderId}`);
+                if (!response.ok) {
+                    document.getElementById('product-display').innerText = "Product information missing.";
+                    return;
+                }
+                const data = await response.json();
+                
+                // 如果发现该订单其实已经录入过评价，直接重定向防倒退和绕过拦截
+                if (data.hasReviewed) {
+                    alert("You have already reviewed this order!");
+                    window.location.href = "/orders";
+                    return;
+                }
+                
+                targetProductId = data.productId;
+                document.getElementById('product-display').innerHTML = `
+                    <i class="bi bi-box-seam" style="color: #0099ff;"></i> 
+                    Product: <b>${data.itemName}</b>
+                `;
+            } catch (err) {
+                console.error("Failed to load product info:", err);
+                document.getElementById('product-display').innerText = "Failed to load product info.";
+            }
+        }
+
+        function initStarsEvent() {
+            const stars = document.querySelectorAll('#star-box i');
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    selectedRating = parseInt(star.getAttribute('data-value'));
+                    stars.forEach((s, idx) => {
+                        if (idx < selectedRating) {
+                            s.className = 'bi bi-star-fill active';
+                        } else {
+                            s.className = 'bi bi-star';
+                        }
+                    });
+                });
+            });
+        }
+
+        async function submitReview() {
+            const text = document.getElementById('reviewText').value.trim();
+
+            if (selectedRating === 0) {
+                alert("Please select a rating star!");
+                return;
+            }
+            if (!targetProductId) {
+                alert("Invalid product data.");
+                return;
+            }
+
+            try {
+                const response = await fetch('/reviews/api/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        productId: targetProductId,
+                        orderId: orderId, // 携带当前 orderId，提交至后端联合防重
+                        rating: selectedRating,
+                        reviewText: text
+                    })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    alert("Thank you! Your review has been published.");
+                    window.location.href = "/orders"; 
+                } else {
+                    alert(result.message);
+                }
+            } catch (err) {
+                console.error("Submission error:", err);
+                alert("Failed to submit review.");
+            }
+        }
+    </script>
+    <script src="/js/component.js"></script>
+</body>
+</html>
