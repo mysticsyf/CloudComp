@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const crypto = require("crypto");
+const upload = require("../config/multer");
 
 //hash password function
 function hashPassword(password) {
@@ -12,9 +13,7 @@ function hashPassword(password) {
 
 //register route
 router.post("/register", async (req, res) => {
-
     const db = req.db;
-
     const { username, name, email, password, role } = req.body;
 
     try {
@@ -205,48 +204,34 @@ router.get("/current", (req, res) => {
     });
 });
 
-const upload=require("../config/multer");
-
-router.post(
-"/upload-avatar",
-upload.single("avatar"),
-async(req,res)=>{
-
+router.post("/upload-avatar", upload.single("avatar"), async(req,res)=>{
     if(!req.session.user){
-
         return res.json({
             success:false,
             message:"Please login."
         });
-
     }
 
     const avatar="/uploads/avatars/"+req.file.filename;
 
     await req.db.query(
-
         "UPDATE users SET avatar=? WHERE id=?",
-
         [
             avatar,
             req.session.user.id
         ]
-
     );
 
     req.session.user.avatar=avatar;
 
     res.json({
-
         success:true,
         avatar
-
     });
 
 });
 
 router.put("/profile", async (req, res) => {
-
     if (!req.session.user) {
         return res.json({
             success: false,
@@ -293,7 +278,6 @@ router.put("/profile", async (req, res) => {
 
     } catch (err) {
         console.error(err);
-
         res.json({
             success: false,
             message: "Database error"
@@ -399,99 +383,73 @@ router.delete("/addresses/:id", async (req, res) => {
 router.get("/vendor-profile", async (req, res) => {
 
     if (!req.session.user) {
-
         return res.json({
             success:false
         });
-
     }
 
     const [rows] = await req.db.query(
-
         "SELECT * FROM vendor_profiles WHERE user_id=?",
-
         [req.session.user.id]
-
     );
 
     if(rows.length===0){
-
         return res.json({
             success:true,
             vendor:{}
         });
-
     }
 
     res.json({
-
         success:true,
         vendor:rows[0]
-
     });
 
 });
 
 router.put("/vendor-profile", async (req,res)=>{
-
     if(!req.session.user){
-
         return res.json({
             success:false,
             message:"Not logged in."
         });
-
     }
 
     const {
-
         storeName,
         businessRegNo,
         address,
         description
-
     } = req.body;
 
     const userId = req.session.user.id;
 
     // Check if another vendor already uses this registration number
     const [duplicate] = await req.db.query(
-
         `SELECT id
          FROM vendor_profiles
          WHERE business_registration_no=?
          AND user_id<>?`,
-
         [
             businessRegNo,
             userId
         ]
-
     );
 
     if(duplicate.length){
-
         return res.json({
-
             success:false,
             message:"Business Registration Number already exists."
-
         });
-
     }
 
     const [existing] = await req.db.query(
-
         "SELECT id FROM vendor_profiles WHERE user_id=?",
-
         [userId]
-
     );
 
     if(existing.length){
-
         await req.db.query(
-
             `UPDATE vendor_profiles
              SET
                 store_name=?,
@@ -499,23 +457,16 @@ router.put("/vendor-profile", async (req,res)=>{
                 address=?,
                 description=?
              WHERE user_id=?`,
-
             [
-
                 storeName,
                 businessRegNo,
                 address,
                 description,
                 userId
-
             ]
-
         );
-
     }else{
-
         await req.db.query(
-
             `INSERT INTO vendor_profiles
             (
                 user_id,
@@ -525,28 +476,19 @@ router.put("/vendor-profile", async (req,res)=>{
                 description
             )
             VALUES(?,?,?,?,?)`,
-
             [
-
                 userId,
                 storeName,
                 businessRegNo,
                 address,
                 description
-
             ]
-
         );
-
     }
-
     res.json({
-
         success:true,
         message:"Store information saved successfully."
-
     });
-
 });
 
 module.exports = router;

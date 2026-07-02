@@ -65,21 +65,21 @@ router.get("/profile", (req, res) => {
       );
     }
   
-    const role = (req.session.user.role || "").toLowerCase();
-  
-    if (role === "vendor") {
-      return res.sendFile(
-        path.join(__dirname, "../views/pages/vendor/vendorProfile.html")
-      );
-    }
-  
-    if (role === "buyer") {
-      return res.sendFile(
-        path.join(__dirname, "../views/pages/buyer/Profile.html")
-      );
-    }
-  
-    return res.redirect("/");
+  const role = (req.session.user.role || "").toLowerCase();
+
+  if (role === "vendor") {
+    return res.sendFile(
+      path.join(__dirname, "../views/pages/vendor/vendorProfile.html")
+    );
+  }
+
+  if (role === "buyer") {
+    return res.sendFile(
+      path.join(__dirname, "../views/pages/buyer/Profile.html")
+    );
+  }
+
+  return res.redirect("/");
 });
 
 module.exports = router;
