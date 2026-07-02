@@ -80,8 +80,7 @@
             
             const starsHtml = generateStars(review.rating);
             const avatarLetter = review.customer_name.charAt(0);
-
-            const formattedOrderId = `Order-ID-${String(review.order_id || '').padStart(2, '0')}`;
+            const formattedOrderId = review.order_id;
 
             card.innerHTML = `
             <div class="review-header">
