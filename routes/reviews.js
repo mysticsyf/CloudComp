@@ -104,7 +104,7 @@ router.get('/api/data/:vendorId', async (req, res) => {
 
         const [reviewsRows] = await pool.query(
             `SELECT 
-                'Verified Customer' as customer_name,
+                o.customer_name as customer_name,   
                 pr.rating,
                 pr.review_text,
                 pr.product_id,
@@ -113,6 +113,7 @@ router.get('/api/data/:vendorId', async (req, res) => {
                 pr.created_at
              FROM product_reviews pr
              JOIN products p ON pr.product_id = p.id
+             JOIN orders o ON pr.order_id = o.id
              WHERE p.vendor_id = ?
              ORDER BY pr.created_at DESC`,
             [vendorId]
